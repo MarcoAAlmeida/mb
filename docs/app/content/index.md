@@ -6,7 +6,7 @@
 
 | url  | Descrição | Tipo |
 | - | - | - |
-| :icon{name="logos:github-icon" size="3em"} | repositório no [Github] | Github repo |
+| :icon{name="logos:github-icon" size="3em"} | repositório no [Github](https://github.com/MarcoAAlmeida/mb) | Github repo |
 | :icon{name="logos:netlify" size="3em"} | [Documentação](https://main--monumental-tanuki-cead25.netlify.app/) | documentation |
 
 

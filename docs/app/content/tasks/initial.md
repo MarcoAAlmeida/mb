@@ -13,6 +13,11 @@
 ![Netlify](/img/screencapture-app-netlify-sites-monumental-tanuki-cead25-deploys-63c33be368a4590008fb5d60-2023-01-14-20_44_32.png)
 ::
 
+::card{description="webhook deploy enabled on Github push to main"}
+![Netlify](/img/screencapture-2023-01-14-205325.png)
+::
+
+
 
 - [nosso blog](http://marcoalmeida.dev.br)
 - [voltar](/)

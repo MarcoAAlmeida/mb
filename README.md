@@ -1,6 +1,10 @@
 # Desafio Movie Battle
 
-Leia nossa documentação [na Netlify](https://main--monumental-tanuki-cead25.netlify.app/)
+**backend** contém projeto Spring Boot REST API
+
+**docs/app** projeto Nuxt Content de documentação
+
+Mais informações [na Netlify](https://main--monumental-tanuki-cead25.netlify.app/)
 
 ou
 
