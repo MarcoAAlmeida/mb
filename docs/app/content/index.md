@@ -13,16 +13,30 @@ Conheça [as tecnologias usadas](/about) neste desafio.
 
 ## Planejamento 
 
-[Visite nosso Trello](https://trello.com/c/sCSyMJY4/1-movie-battle-backlog) para acompanhar as etapas de planejamento
+O planejamento para este desafio foi feito através de um [Dashboard do Trello](https://trello.com/c/sCSyMJY4/1-movie-battle-backlog) para acompanhar as etapas de planejamento)
+
+::card{description="Trello Dashboard: primeiras tarefas"}
 ![Trello](/img/screencapture-trello-b-i8r8CJq6-moviebattle-2023-01-14-12_38_14.png)
+::
+
 
 ## Execução
 
+### Tarefas iniciais
+
+- criação do projeto princial em Spring Boot
+- projeto de documentação em Nuxt
+- setup do Github
+- setup do Netlify
+
+::card{description="Spring Initializr: criação do projeto apenas com dependências previstas"}
+![SpringInitializr](/img/screencapture-2023-01-14-185422.png)
+::
 
 
 ## Documentação
 
-A documentação para este projeto está disponível como uma aplicação Nuxt:
+A documentação para este projeto está disponível como uma aplicação [Nuxt Content](https://content.nuxtjs.org/):
 
 ```[prompt]
 > cd docs/app
