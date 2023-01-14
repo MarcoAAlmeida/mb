@@ -4,6 +4,13 @@
 - Explore os frameworks Spring: Web, Boot, Data, Security e Cloud.
 - Linguagem: Java 11 ou 17
 
+| url  | Descrição | Tipo |
+| - | - | - |
+| :icon{name="logos:github-icon" size="3em"} | repositório no [Github] | Github repo |
+| :icon{name="logos:netlify" size="3em"} | [Documentação](https://main--monumental-tanuki-cead25.netlify.app/) | documentation |
+
+
+
 Conheça [as tecnologias usadas](/about) neste desafio.
 
 ::card{description="OpenAI Dall-E prompt: a drawing of a hand holding two cards, each card is a poster of a samurai movie from the sixties"}
@@ -22,19 +29,11 @@ O planejamento para este desafio foi feito através de um [Dashboard do Trello](
 
 ## Execução
 
-### Tarefas iniciais
-
-- criação do projeto princial em Spring Boot
-- projeto de documentação em Nuxt
-- setup do Github
-- setup do Netlify
-
-::card{description="Spring Initializr: criação do projeto apenas com dependências previstas"}
-![SpringInitializr](/img/screencapture-2023-01-14-185422.png)
-::
+1. [tarefas iniciais](/tasks/initial) de setup dos projetos e do site de documentação no Netlify
 
 
-## Documentação
+
+### Documentação
 
 A documentação para este projeto está disponível como uma aplicação [Nuxt Content](https://content.nuxtjs.org/):
 
