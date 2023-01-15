@@ -8,11 +8,12 @@ import java.util.Set;
 
 public abstract class AbstractTests {
     public static final String IMDB_1 = "imdb_1";
+    public static final String TITLE_1 = "title_1";
 
-    protected static final Movie MOVIE_1 = Movie.of(IMDB_1);
-    protected static final Movie MOVIE_1_OTHER_INSTANCE = Movie.of(IMDB_1);
-    protected static final Movie MOVIE_2 = Movie.of("imdb_2");
-    protected static final Movie MOVIE_3 = Movie.of("imdb_3");
+    protected static final Movie MOVIE_1 = Movie.of(IMDB_1, TITLE_1, 9.9, 1L);
+    protected static final Movie MOVIE_1_OTHER_INSTANCE = Movie.of(IMDB_1, TITLE_1, 9.9, 1L);
+    protected static final Movie MOVIE_2 = Movie.of("imdb_2", "title_2", 9.9, 1L);
+    protected static final Movie MOVIE_3 = Movie.of("imdb_3", "title_3", 9.9, 1L);
 
     protected static final ReflexivePair<Movie> PAIR_1_2 = ReflexivePair.of(MOVIE_1, MOVIE_2);
     protected static final ReflexivePair<Movie> PAIR_1_2_REVERSED = ReflexivePair.of(MOVIE_2, MOVIE_1);
