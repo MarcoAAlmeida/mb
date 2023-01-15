@@ -16,14 +16,10 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 @ExtendWith(MockitoExtension.class)
 class ReflexivePairTests extends AbstractTests {
 
-	private static final ReflexivePair<Movie> PAIR_1 = ReflexivePair.of(MOVIE_1, MOVIE_2);
-	private static final ReflexivePair<Movie> PAIR_1_REVERSED = ReflexivePair.of(MOVIE_2, MOVIE_1);
-	private static final ReflexivePair<Movie> PAIR_2 = ReflexivePair.of(MOVIE_1, MOVIE_3);
-
 	@Test
 	void WhenStaticallyConstructed_ExpectValues() {
-		assertThat(PAIR_1.getFirst()).isEqualTo(MOVIE_1);
-		assertThat(PAIR_1.getSecond()).isEqualTo(MOVIE_2);
+		assertThat(PAIR_1_2.getFirst()).isEqualTo(MOVIE_1);
+		assertThat(PAIR_1_2.getSecond()).isEqualTo(MOVIE_2);
 	}
 
 
@@ -38,24 +34,24 @@ class ReflexivePairTests extends AbstractTests {
 
 	@Test
 	void WhenReflexivePairEquals_PairOrderDoesNotMatter() {
-		assertThat(PAIR_1.equals(new Object())).isFalse();
-		assertThat(PAIR_1.equals(PAIR_1)).isTrue();
-		assertThat(PAIR_1.equals(PAIR_1_REVERSED)).isTrue();
-		assertThat(PAIR_1_REVERSED.equals(PAIR_1)).isTrue();
-		assertThat(PAIR_1.equals(PAIR_2)).isFalse();
+		assertThat(PAIR_1_2.equals(new Object())).isFalse();
+		assertThat(PAIR_1_2.equals(PAIR_1_2)).isTrue();
+		assertThat(PAIR_1_2.equals(PAIR_1_2_REVERSED)).isTrue();
+		assertThat(PAIR_1_2_REVERSED.equals(PAIR_1_2)).isTrue();
+		assertThat(PAIR_1_2.equals(PAIR_1_3)).isFalse();
 	}
 
 	@Test
 	void WhenReflexiveInSet_NoDuplicates() {
 		Set<ReflexivePair<Movie>> testSet = new HashSet<>();
 
-		testSet.add(PAIR_1);
+		testSet.add(PAIR_1_2);
 		assertThat(testSet).hasSize(1);
 
-		testSet.add(PAIR_2);
+		testSet.add(PAIR_1_3);
 		assertThat(testSet).hasSize(2);
 
-		testSet.add(PAIR_1_REVERSED);
+		testSet.add(PAIR_1_2_REVERSED);
 		assertThat(testSet).hasSize(2);
 	}
 
