@@ -33,7 +33,7 @@ O planejamento para este desafio foi feito através de um [Dashboard do Trello](
 2. implementando [pares reflexivos](/tasks/reflexive_pairs)
 3. implementando [primeiros serviços](/tasks/first_services)
 4. [obtendo dados](/tasks/data_load) da [OMDb API](https://www.omdbapi.com/)
-
+5. [persistência](/tasks/persistence)
 
 
 ## Documentação
