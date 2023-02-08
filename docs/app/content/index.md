@@ -7,7 +7,7 @@
 | url  | Descrição | Tipo |
 | - | - | - |
 | :icon{name="logos:github-icon" size="3em"} | repositório no [Github](https://github.com/MarcoAAlmeida/mb) | Github repo |
-| :icon{name="logos:netlify" size="3em"} | [Documentação](https://main--monumental-tanuki-cead25.netlify.app/) | documentation |
+| :icon{name="logos:netlify" size="3em"} | [Documentação live site](https://main--monumental-tanuki-cead25.netlify.app/) | documentation |
 
 
 
@@ -20,7 +20,7 @@ Conheça [as tecnologias usadas](/about) neste desafio.
 
 ## Planejamento 
 
-O planejamento para este desafio foi feito através de um [Dashboard do Trello](https://trello.com/c/sCSyMJY4/1-movie-battle-backlog) para acompanhar as etapas de planejamento)
+O planejamento para este desafio foi feito através de um [Dashboard do Trello](https://trello.com/c/sCSyMJY4/1-movie-battle-backlog)
 
 ::card{description="Trello Dashboard: primeiras tarefas"}
 ![Trello](/img/screencapture-trello-b-i8r8CJq6-moviebattle-2023-01-14-12_38_14.png)
@@ -29,13 +29,16 @@ O planejamento para este desafio foi feito através de um [Dashboard do Trello](
 
 ## Execução
 
-1. [tarefas iniciais](/tasks/initial) de setup dos projetos e do site de documentação no Netlify
+1. [tarefas iniciais](/tasks/initial)
+2. implementando [pares reflexivos](/tasks/reflexive_pairs)
+3. implementando [primeiros serviços](/tasks/first_services)
+4. [obtendo dados](/tasks/data_load) da [OMDb API](https://www.omdbapi.com/)
 
 
 
-### Documentação
+## Documentação
 
-A documentação para este projeto está disponível como uma aplicação [Nuxt Content](https://content.nuxtjs.org/):
+Disponível como uma aplicação [Nuxt Content](https://content.nuxtjs.org/):
 
 ```[prompt]
 > cd docs/app
@@ -56,3 +59,4 @@ Nuxt 3.0.0 with Nitro 1.0.0
 ```
 
 - [no localhost](http://localhost:3000)
+- [na Netlify](https://main--monumental-tanuki-cead25.netlify.app/)
