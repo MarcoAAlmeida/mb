@@ -29,7 +29,8 @@ public class ReflexivePair<S> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ReflexivePair<?> that = (ReflexivePair<?>) o;
-        return Objects.equals(first, that.first) && Objects.equals(second, that.second);
+        return (Objects.equals(first, that.first) && Objects.equals(second, that.second)) || (Objects.equals(first, that.second) && Objects.equals(second, that.first));
+        
     }
 
     @Override
