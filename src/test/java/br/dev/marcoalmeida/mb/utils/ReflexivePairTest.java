@@ -21,7 +21,7 @@ public class ReflexivePairTest {
 
     }
 
-    /**
+    
     @Test
     public void WhenSameElementsDifferentOrder_PairsAreEqual(){
         ReflexivePair<String> p1 = new ReflexivePair<>("one", "two");
@@ -29,7 +29,7 @@ public class ReflexivePairTest {
 
         assertThat(p1).isEqualTo(p2);
     }
-     **/
+     
 
     @Test
     public void WhenSameElementUsedInDifferentPairs_NoExceptionAndPairsAreDifferent(){
