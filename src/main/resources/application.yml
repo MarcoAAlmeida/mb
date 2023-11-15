@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: mb
+  profiles:
+    active: dev
+
+management:
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include:
+          [
+              'env',
+              'health',
+              'info',
+              'logfile',
+              'loggers',
+              'threaddump',
+              'liquibase',
+          ]
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+      group:
+        liveness:
+          include: livenessState
+        readiness:
+          include: readinessState,db
