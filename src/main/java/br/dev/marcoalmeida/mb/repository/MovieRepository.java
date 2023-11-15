@@ -1,4 +1,4 @@
-package br.dev.marcoalmeida.mb.repositories;
+package br.dev.marcoalmeida.mb.repository;
 
 import br.dev.marcoalmeida.mb.domain.Movie;
 import org.springframework.data.repository.CrudRepository;
