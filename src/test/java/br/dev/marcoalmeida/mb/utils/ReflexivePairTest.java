@@ -19,6 +19,8 @@ public class ReflexivePairTest {
                 .isInstanceOf(RuntimeException.class)
                 .hasMessage("element [1] cannot be repeated");
 
+        // TODO: add a similar test for Movie
+
     }
 
     
@@ -28,6 +30,8 @@ public class ReflexivePairTest {
         ReflexivePair<String> p2 = new ReflexivePair<>("two", "one");
 
         assertThat(p1).isEqualTo(p2);
+
+        // TODO: add a similar test for Movie
     }
      
 
@@ -37,6 +41,8 @@ public class ReflexivePairTest {
         ReflexivePair<String> p2 = new ReflexivePair<>("two", "three");
 
         assertThat(p1).isNotEqualTo(p2);
+
+        // TODO: add a similar test for Movie
     }
 
 
