@@ -1,4 +1,4 @@
-package br.dev.marcoalmeida.mb;
+package br.dev.marcoalmeida.mb.config;
 
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.context.annotation.Bean;

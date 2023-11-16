@@ -25,7 +25,7 @@ public class MovieTests {
     @Test
     public void WhenNonEmptyBuilder_NonNullProperties(){
         Movie m = Movie.builder()
-                .id(1L)
+                .id("1L")
                 .title("testMovie")
                 .build();
         assertThat(m.getId()).isNotNull();
@@ -34,7 +34,7 @@ public class MovieTests {
 
     @Test
     public void WhenStaticBuilder_NonNullProperties(){
-        Movie m = Movie.of(1L, "testMovie");
+        Movie m = Movie.of("1L", "testMovie");
         assertThat(m.getId()).isNotNull();
         assertThat(m.getTitle()).isNotNull();
     }
@@ -42,12 +42,12 @@ public class MovieTests {
     @Test
     public void WhenSameIdentity_ObjectsAreEqual(){
         Movie m1 = Movie.builder()
-                .id(1L)
+                .id("1L")
                 .title("one")
                 .build();
 
         Movie m2 = Movie.builder()
-                .id(1L)
+                .id("1L")
                 .title("two")
                 .build();
 
