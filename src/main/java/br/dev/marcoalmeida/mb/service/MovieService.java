@@ -3,8 +3,8 @@ package br.dev.marcoalmeida.mb.service;
 
 import br.dev.marcoalmeida.mb.client.OmdbClient;
 import br.dev.marcoalmeida.mb.domain.Movie;
-import br.dev.marcoalmeida.mb.dto.ResultsDTO;
-import br.dev.marcoalmeida.mb.dto.SearchResultDTO;
+import br.dev.marcoalmeida.mb.dto.omdb.ResultsDTO;
+import br.dev.marcoalmeida.mb.dto.omdb.SearchResultDTO;
 import br.dev.marcoalmeida.mb.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

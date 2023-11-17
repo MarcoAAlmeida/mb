@@ -1,6 +1,6 @@
 package br.dev.marcoalmeida.mb.client;
 
-import br.dev.marcoalmeida.mb.dto.ResultsDTO;
+import br.dev.marcoalmeida.mb.dto.omdb.ResultsDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;

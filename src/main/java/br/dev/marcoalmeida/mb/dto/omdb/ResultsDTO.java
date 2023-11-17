@@ -1,4 +1,4 @@
-package br.dev.marcoalmeida.mb.dto;
+package br.dev.marcoalmeida.mb.dto.omdb;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

@@ -3,6 +3,10 @@ spring:
     name: mb
   profiles:
     active: dev
+  mvc:
+    view:
+      prefix: templates
+      suffix: .html
 
 management:
   endpoints:
@@ -18,6 +22,7 @@ management:
               'loggers',
               'threaddump',
               'liquibase',
+              'mappings'
           ]
   endpoint:
     health:
@@ -30,6 +35,9 @@ management:
         readiness:
           include: readinessState,db
 
+
+
 omdb:
   server:
     url: https://www.omdbapi.com
+
