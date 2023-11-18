@@ -17,8 +17,8 @@ public class MovieRepositoryTest {
 
     private static final String ID_1 = "id_1";
 
-    private static final Movie MOVIE_1 = Movie.of(ID_1, "movie1");
-    private static final Movie MOVIE_1_a = Movie.of(ID_1, "movie1 alternative");
+    private static final Movie MOVIE_1 = Movie.of(ID_1, "movie1", 0.0, 10L);
+    private static final Movie MOVIE_1_a = Movie.of(ID_1, "movie1 alternative",0.1, 11L);
 
     @BeforeEach
     public void setup(){

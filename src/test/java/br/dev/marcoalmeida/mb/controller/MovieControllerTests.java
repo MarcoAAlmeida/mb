@@ -29,8 +29,8 @@ public class MovieControllerTests {
     @Test
     public void WhenLoadByTitleInvoked_LoadedMoviesAreReturned() {
 
-        Movie m1 = Movie.of("id1", "title1");
-        Movie m2 = Movie.of("id2", "title2");
+        Movie m1 = Movie.of("id1", "title1", 0.0, 10L);
+        Movie m2 = Movie.of("id2", "title2", 0.1, 11L);
 
         when(movieService.loadMoviesByTitle(any()))
                 .thenReturn(List.of(m1, m2));

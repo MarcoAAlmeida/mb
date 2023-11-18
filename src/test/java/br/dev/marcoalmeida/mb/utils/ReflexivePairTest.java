@@ -21,8 +21,8 @@ public class ReflexivePairTest {
                 .isInstanceOf(RuntimeException.class)
                 .hasMessage("element [1] cannot be repeated");
 
-        Movie movie1 = Movie.builder().id(1L).title("movieTitle1").build();
-        Movie movie2 = Movie.builder().id(1L).title("movieTitle2").build();
+        Movie movie1 = Movie.builder().id("1L").title("movieTitle1").build();
+        Movie movie2 = Movie.builder().id("1L").title("movieTitle2").build();
 
         assertThatThrownBy(() -> new ReflexivePair<Movie>(movie1, movie2))
                 .isInstanceOf(RuntimeException.class)
@@ -40,8 +40,8 @@ public class ReflexivePairTest {
 
         assertThat(p1).isEqualTo(p2);
 
-        Movie movie1 = Movie.builder().id(1L).build();
-        Movie movie2 = Movie.builder().id(2L).build();
+        Movie movie1 = Movie.builder().id("1L").build();
+        Movie movie2 = Movie.builder().id("2L").build();
 
         ReflexivePair<Movie> moviePair1 = new ReflexivePair<>(movie1, movie2);
         ReflexivePair<Movie> moviePair2 = new ReflexivePair<>(movie2, movie1);
@@ -57,9 +57,9 @@ public class ReflexivePairTest {
 
         assertThat(p1).isNotEqualTo(p2);
 
-        Movie movie1 = Movie.builder().id(1L).build();
-        Movie movie2 = Movie.builder().id(2L).build();
-        Movie movie3 = Movie.builder().id(3L).build();
+        Movie movie1 = Movie.builder().id("1L").build();
+        Movie movie2 = Movie.builder().id("2L").build();
+        Movie movie3 = Movie.builder().id("3L").build();
 
         ReflexivePair<Movie> moviePair1 = new ReflexivePair<>(movie1, movie2);
         ReflexivePair<Movie> moviePair2 = new ReflexivePair<>(movie2, movie3);

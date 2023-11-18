@@ -36,7 +36,7 @@ public class MovieService {
 
     private Movie saveResult(SearchResultDTO searchResultDTO) {
         return movieRepository.save(
-                Movie.of(searchResultDTO.getImdbID(), searchResultDTO.getTitle()));
+                Movie.of(searchResultDTO.getImdbID(), searchResultDTO.getTitle(), 0.0, 0L));
     }
 
 }
