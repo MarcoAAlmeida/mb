@@ -15,7 +15,7 @@ public class MovieRepositoryTest {
     @Autowired
     MovieRepository movieRepository;
 
-    private static final Long ID_1 = 1l;
+    private static final String ID_1 = "id_1";
 
     private static final Movie MOVIE_1 = Movie.of(ID_1, "movie1");
     private static final Movie MOVIE_1_a = Movie.of(ID_1, "movie1 alternative");
