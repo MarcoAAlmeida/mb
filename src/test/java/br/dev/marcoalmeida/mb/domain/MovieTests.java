@@ -44,11 +44,15 @@ public class MovieTests {
         Movie m1 = Movie.builder()
                 .id("1L")
                 .title("one")
+                .rating(10.0)
+                .votes(10L)
                 .build();
 
         Movie m2 = Movie.builder()
                 .id("1L")
                 .title("two")
+                .rating(10.0)
+                .votes(10L)
                 .build();
 
         assertThat(m1).isEqualTo(m2);

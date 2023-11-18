@@ -18,6 +18,8 @@ public class Movie {
 
     private String title;
 
+    private Double rating;
 
+    private Long votes;
 
 }
