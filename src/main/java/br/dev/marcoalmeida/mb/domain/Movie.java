@@ -18,8 +18,12 @@ public class Movie {
 
     private String title;
 
+    private String posterUrl;
+
     private Double rating;
 
     private Long votes;
+
+    private Long releaseYear;
 
 }

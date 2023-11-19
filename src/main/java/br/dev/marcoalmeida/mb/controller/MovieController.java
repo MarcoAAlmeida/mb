@@ -1,6 +1,7 @@
 package br.dev.marcoalmeida.mb.controller;
 
 import br.dev.marcoalmeida.mb.dto.MovieDTO;
+import br.dev.marcoalmeida.mb.mapper.MovieMapper;
 import br.dev.marcoalmeida.mb.request.LoadByTitleRequest;
 import br.dev.marcoalmeida.mb.service.MovieService;
 import lombok.AllArgsConstructor;
@@ -16,13 +17,11 @@ import java.util.List;
 @RequestMapping("movie")
 @AllArgsConstructor
 public class MovieController {
-
     private MovieService movieService;
-
     @PostMapping("/loadByTitle")
     public ResponseEntity<List<MovieDTO>> loadByTitle(@RequestBody LoadByTitleRequest request){
         return ResponseEntity.ok(movieService.loadMoviesByTitle(request.getTitle()).stream()
-                .map(MovieDTO::of)
+                .map(MovieMapper.INSTANCE::convert)
                 .toList());
     }
 

@@ -9,4 +9,7 @@ public class SearchResultDTO {
 
     @JsonProperty("Title")
     protected String title;
+
+    @JsonProperty("Poster")
+    protected String Poster;
 }
