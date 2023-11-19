@@ -34,12 +34,34 @@ public class MovieServiceTest {
     public void WhenKeywordSupplied_MoviesArePopulated() throws IOException {
         mockServerClient
                 .when(request()
+                    .withQueryStringParameter("s", "Star")
                     .withMethod("GET")
                 ).respond(response()
                     .withStatusCode(200)
                     .withContentType(MediaType.APPLICATION_JSON)
-                    .withBody(Files.readString(Path.of("src/test/resources/omdb.json")))
+                    .withBody(Files.readString(Path.of("src/test/resources/omdb/search.json")))
                 );
+
+        mockServerClient
+                .when(request()
+                        .withQueryStringParameter("i", "tt0076759")
+                        .withMethod("GET")
+                ).respond(response()
+                        .withStatusCode(200)
+                        .withContentType(MediaType.APPLICATION_JSON)
+                        .withBody(Files.readString(Path.of("src/test/resources/omdb/tt0076759.json")))
+                );
+
+        mockServerClient
+                .when(request()
+                        .withQueryStringParameter("i", "tt0080684")
+                        .withMethod("GET")
+                ).respond(response()
+                        .withStatusCode(200)
+                        .withContentType(MediaType.APPLICATION_JSON)
+                        .withBody(Files.readString(Path.of("src/test/resources/omdb/tt0080684.json")))
+                );
+
 
         assertThat(movieRepository.count()).isEqualTo(0);
 

@@ -33,13 +33,6 @@ public class MovieTests {
     }
 
     @Test
-    public void WhenStaticBuilder_NonNullProperties(){
-        Movie m = Movie.of("1L", "testMovie", 10.0, 10L);
-        assertThat(m.getId()).isNotNull();
-        assertThat(m.getTitle()).isNotNull();
-    }
-
-    @Test
     public void WhenSameIdentity_ObjectsAreEqual(){
         Movie m1 = Movie.builder()
                 .id("1L")

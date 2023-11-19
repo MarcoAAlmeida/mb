@@ -3,6 +3,7 @@ package br.dev.marcoalmeida.mb.service;
 
 import br.dev.marcoalmeida.mb.client.OmdbClient;
 import br.dev.marcoalmeida.mb.domain.Movie;
+import br.dev.marcoalmeida.mb.dto.omdb.InfoDTO;
 import br.dev.marcoalmeida.mb.dto.omdb.ResultsDTO;
 import br.dev.marcoalmeida.mb.dto.omdb.SearchResultDTO;
 import br.dev.marcoalmeida.mb.repository.MovieRepository;
@@ -30,13 +31,24 @@ public class MovieService {
 
     private List<Movie> saveResults(ResultsDTO resultsDTO) {
         return resultsDTO.getResults().stream()
-                .map(this::saveResult)
+                .flatMap(resultItem -> getAdditionalInfo(resultItem).stream())
                 .collect(Collectors.toList());
     }
 
-    private Movie saveResult(SearchResultDTO searchResultDTO) {
-        return movieRepository.save(
-                Movie.of(searchResultDTO.getImdbID(), searchResultDTO.getTitle(), 0.0, 0L));
+    private Optional<Movie> getAdditionalInfo(SearchResultDTO resultItem) {
+        return Optional.ofNullable(omdbClient.getInfo(resultItem.getImdbID()).getBody())
+                .map(info -> save(resultItem, info));
+    }
+
+    private Movie save(SearchResultDTO resultItem, InfoDTO info){
+        return movieRepository.save(Movie.builder()
+                        .id(resultItem.getImdbID())
+                        .title(resultItem.getTitle())
+                        .rating(info.getImdbRating())
+                        .votes(Long.parseLong(info.getImdbVotes().replace(",","")))
+                        .posterUrl(resultItem.getPoster())
+                        .releaseYear(info.getYear())
+                .build());
     }
 
 }
