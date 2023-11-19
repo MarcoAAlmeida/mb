@@ -60,13 +60,21 @@ public class MovieRepositoryTest {
 
     @Test
     public void WhenPreviouslySavedGetsDeleted_NotFoundByID(){
-        // check that no movies exist
-        // save MOVIE_1_a
-        // check that only one movie exists
-        // check that you can retrieve it by ID
-        // then delete it
-        // check that no movies exist
-        // check that you cannot retrieve it by ID
+    	assertThat(movieRepository.count()).isEqualTo(0);
+    	   
+    	movieRepository.save(MOVIE_1_a);
+    	
+    	assertThat(movieRepository.count()).isEqualTo(1);
+    	
+    	Optional<Movie> optionalMovie = movieRepository.findById(ID_1);
+    	assertThat(optionalMovie).isPresent();
+    	
+    	movieRepository.deleteById(ID_1);
+
+    	assertThat(movieRepository.count()).isEqualTo(0);
+    	
+    	optionalMovie = movieRepository.findById(ID_1);
+    	assertThat(optionalMovie).isEmpty();
 
     }
 
