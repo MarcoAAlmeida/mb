@@ -10,20 +10,12 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Movie {
+public class Player {
 
     @Id
     @EqualsAndHashCode.Include
     private String id;
 
-    private String title;
-
-    private String posterUrl;
-
-    private Double rating;
-
-    private Long votes;
-
-    private Long releaseYear;
+    String name;
 
 }

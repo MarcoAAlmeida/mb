@@ -3,10 +3,16 @@ spring:
     name: mb
   profiles:
     active: dev
+  jpa:
+    hibernate:
+      ddl-auto: none
   mvc:
     view:
       prefix: templates
       suffix: .html
+  sql:
+    init:
+      mode: always
 
 management:
   endpoints:
