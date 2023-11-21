@@ -1,3 +1,7 @@
+-- liquibase formated sql
+
+-- changeset marco:001-some-movies.sql logicalFilePath:file_0.0.1
+
 INSERT INTO "PUBLIC"."MOVIE" VALUES
 
                                  (6.2, 2003, 150309, 'tt0324216', 'https://m.media-amazon.com/images/M/MV5BZDg2NDJkOGYtMjM3My00Mzc2LWJiYjktODFlMzBjNmQwMTEyXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg', 'The Texas Chainsaw Massacre'),
