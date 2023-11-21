@@ -5,15 +5,4 @@
     <changeSet id="tag-0.0.0" author="marco" logicalFilePath="file_0.0.0">
         <tagDatabase tag="0.0.0"/>
     </changeSet>
-
-    <include file="classpath:db/changelog/changesets/001-some-movies.sql" relativeToChangelogFile="false"/>
-    <changeSet id="tag-0.0.1" author="marco" logicalFilePath="file_0.0.1">
-        <tagDatabase tag="0.0.1"/>
-    </changeSet>
-
-    <changeSet id="tag-0.0.2" author="marco" logicalFilePath="file_0.0.2">
-        <loadUpdateData tableName="movie" relativeToChangelogFile="true" file="changesets/002-another-movie.csv" primaryKey="id"/>
-    </changeSet>
-
-
 </databaseChangeLog>
