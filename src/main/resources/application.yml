@@ -1,19 +1,3 @@
-spring:
-  application:
-    name: mb
-  profiles:
-    active: dev
-  jpa:
-    hibernate:
-      ddl-auto: none
-  mvc:
-    view:
-      prefix: templates
-      suffix: .html
-  sql:
-    init:
-      mode: always
-
 management:
   endpoints:
     web:
@@ -41,9 +25,25 @@ management:
         readiness:
           include: readinessState,db
 
-
-
 omdb:
   server:
     url: https://www.omdbapi.com
+
+spring:
+  application:
+    name: mb
+  jpa:
+    hibernate:
+      ddl-auto: none
+  mvc:
+    view:
+      prefix: templates
+      suffix: .html
+  profiles:
+    active: dev
+  sql:
+    init:
+      mode: always
+  liquibase:
+    change-log: db/changelog/changelog-master.xml
 

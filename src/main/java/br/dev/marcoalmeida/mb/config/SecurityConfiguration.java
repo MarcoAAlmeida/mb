@@ -1,6 +1,7 @@
 package br.dev.marcoalmeida.mb.config;
 
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -29,10 +30,18 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    @Order(1)
-    public SecurityFilterChain managementFilterChain(HttpSecurity http) throws Exception {
-        http.securityMatcher(EndpointRequest.toAnyEndpoint())
+    @Order(2)
+    public SecurityFilterChain staticResourcesFilterChain(HttpSecurity http) throws Exception {
+        http.securityMatcher(PathRequest.toStaticResources().atCommonLocations())
             .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
+        return http.build();
+    }
+
+    @Bean
+    @Order(1)
+    public SecurityFilterChain actuatorFilterChain(HttpSecurity http) throws Exception {
+        http.securityMatcher(EndpointRequest.toAnyEndpoint())
+                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
         return http.build();
     }
 
