@@ -8,7 +8,6 @@ import org.mockserver.model.MediaType;
 import org.mockserver.springtest.MockServerTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,7 +21,6 @@ import static org.mockserver.model.HttpResponse.response;
 
 @SpringBootTest
 @MockServerTest("omdb.server.url=http://localhost:${mockServerPort}")
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class MovieServiceTest {
 
     @Autowired
@@ -31,8 +29,6 @@ public class MovieServiceTest {
     private MovieService movieService;
 
     private MockServerClient mockServerClient;
-
-    private static Long INITIAL_LOAD_COUNT = 14L;
 
     @Test
     public void WhenKeywordSupplied_MoviesArePopulated() throws IOException {
@@ -67,12 +63,12 @@ public class MovieServiceTest {
                 );
 
 
-        assertThat(movieRepository.count()).isEqualTo(INITIAL_LOAD_COUNT);
+        assertThat(movieRepository.count()).isEqualTo(0L);
 
         List<Movie> movies = movieService.loadMoviesByTitle("Star");
 
         assertThat(movies).isNotEmpty();
-        assertThat(movieRepository.count()).isEqualTo(INITIAL_LOAD_COUNT + 2);
+        assertThat(movieRepository.count()).isEqualTo(2);
         assertThat(movies.size()).isEqualTo(2);
 
         Optional<Movie> m1 = movieRepository.findByTitle("Star Wars: Episode IV - A New Hope");
