@@ -30,37 +30,29 @@ public class MovieServiceTest {
 
     private MockServerClient mockServerClient;
 
+    public void mockingServerClient(String parameterSearch, String parameterMovie, String fileData) {
+    	mockServerClient
+		    .when(request()
+		        .withQueryStringParameter(parameterSearch, parameterMovie)
+		        .withMethod("GET")
+		    ).respond(response()
+		        .withStatusCode(200)
+		        .withContentType(MediaType.APPLICATION_JSON)
+		        .withBody(fileData)
+		    );
+	}
+    
+    
     @Test
     public void WhenKeywordSupplied_MoviesArePopulated() throws IOException {
-        mockServerClient
-                .when(request()
-                    .withQueryStringParameter("s", "Star")
-                    .withMethod("GET")
-                ).respond(response()
-                    .withStatusCode(200)
-                    .withContentType(MediaType.APPLICATION_JSON)
-                    .withBody(Files.readString(Path.of("src/test/resources/omdb/search.json")))
-                );
+    	String fileData = Files.readString(Path.of("src/test/resources/omdb/search.json"));
+    	mockingServerClient("s", "Star", fileData);
+    		
+    	fileData = Files.readString(Path.of("src/test/resources/omdb/tt0076759.json"));
+    	mockingServerClient("i", "tt0076759", fileData);
 
-        mockServerClient
-                .when(request()
-                        .withQueryStringParameter("i", "tt0076759")
-                        .withMethod("GET")
-                ).respond(response()
-                        .withStatusCode(200)
-                        .withContentType(MediaType.APPLICATION_JSON)
-                        .withBody(Files.readString(Path.of("src/test/resources/omdb/tt0076759.json")))
-                );
-
-        mockServerClient
-                .when(request()
-                        .withQueryStringParameter("i", "tt0080684")
-                        .withMethod("GET")
-                ).respond(response()
-                        .withStatusCode(200)
-                        .withContentType(MediaType.APPLICATION_JSON)
-                        .withBody(Files.readString(Path.of("src/test/resources/omdb/tt0080684.json")))
-                );
+    	fileData = Files.readString(Path.of("src/test/resources/omdb/tt0080684.json"));
+    	mockingServerClient("i", "tt0080684", fileData);
 
 
         assertThat(movieRepository.count()).isEqualTo(0L);
@@ -76,5 +68,29 @@ public class MovieServiceTest {
 
         Optional<Movie> m2 = movieRepository.findByTitle("Star Wars: Episode V - The Empire Strikes Back");
         assertThat(m2).isPresent();
+        
+        Movie movieOne = m1.get();
+        Movie movieTwo = m2.get();
+        
+        assertThat(movieOne.getId()).isEqualTo("tt0076759");
+        assertThat(movieTwo.getId()).isEqualTo("tt0080684");
+        
+        assertThat(movieOne.getTitle()).isEqualTo("Star Wars: Episode IV - A New Hope");
+        assertThat(movieTwo.getTitle()).isEqualTo("Star Wars: Episode V - The Empire Strikes Back");
+        
+        assertThat(movieOne.getRating()).isEqualTo(8.6);
+        assertThat(movieTwo.getRating()).isEqualTo(8.7);
+        
+        assertThat(movieOne.getVotes()).isEqualTo(1420107);
+        assertThat(movieTwo.getVotes()).isEqualTo(1349018);
+        
+        assertThat(movieOne.getVotes()).isInstanceOf(Long.class);
+        assertThat(movieTwo.getVotes()).isInstanceOf(Long.class);
+        
+        assertThat(movieOne.getPosterUrl()).isEqualTo("https://m.media-amazon.com/images/M/MV5BOTA5NjhiOTAtZWM0ZC00MWNhLThiMzEtZDFkOTk2OTU1ZDJkXkEyXkFqcGdeQXVyMTA4NDI1NTQx._V1_SX300.jpg");
+        assertThat(movieTwo.getPosterUrl()).isEqualTo("https://m.media-amazon.com/images/M/MV5BYmU1NDRjNDgtMzhiMi00NjZmLTg5NGItZDNiZjU5NTU4OTE0XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg");
+        
+        assertThat(movieOne.getReleaseYear()).isEqualTo(1977);
+        assertThat(movieTwo.getReleaseYear()).isEqualTo(1980);
     }
 }
