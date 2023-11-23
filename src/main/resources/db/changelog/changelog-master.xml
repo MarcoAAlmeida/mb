@@ -15,5 +15,4 @@
         <loadUpdateData tableName="movie" relativeToChangelogFile="true" file="changesets/002-another-movie.csv" primaryKey="id"/>
     </changeSet>
 
-
 </databaseChangeLog>
