@@ -1,7 +1,7 @@
 package br.dev.marcoalmeida.mb.mapper;
 
 import br.dev.marcoalmeida.mb.domain.Movie;
-import br.dev.marcoalmeida.mb.dto.MovieDTO;
+import br.dev.marcoalmeida.mb.dto.csv.MovieDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
