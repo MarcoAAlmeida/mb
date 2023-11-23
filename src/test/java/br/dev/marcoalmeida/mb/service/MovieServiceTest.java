@@ -65,7 +65,7 @@ public class MovieServiceTest {
 
         assertThat(movieRepository.count()).isEqualTo(0L);
 
-        List<Movie> movies = movieService.loadMoviesByTitle("Star");
+        List<Movie> movies = movieService.generateByTitle("Star");
 
         assertThat(movies).isNotEmpty();
         assertThat(movieRepository.count()).isEqualTo(2);

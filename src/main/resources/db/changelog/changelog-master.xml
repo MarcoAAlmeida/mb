@@ -15,4 +15,9 @@
         <loadUpdateData tableName="movie" relativeToChangelogFile="true" file="changesets/002-another-movie.csv" primaryKey="id"/>
     </changeSet>
 
+    <changeSet id="tag-0.0.3" author="marco" logicalFilePath="file_0.0.3">
+        <loadUpdateData tableName="movie" relativeToChangelogFile="true" file="changesets/003-Star_20231122215253.csv" primaryKey="id"/>
+    </changeSet>
+
+
 </databaseChangeLog>

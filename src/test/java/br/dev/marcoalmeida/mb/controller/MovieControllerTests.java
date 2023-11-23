@@ -1,11 +1,19 @@
 package br.dev.marcoalmeida.mb.controller;
 
+import br.dev.marcoalmeida.mb.request.GenerateCSVByTitle;
 import br.dev.marcoalmeida.mb.service.MovieService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpHeaders;
+import org.springframework.mock.web.MockHttpServletResponse;
+
+import java.util.regex.Pattern;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 @ExtendWith(MockitoExtension.class)
 public class MovieControllerTests {
@@ -17,25 +25,14 @@ public class MovieControllerTests {
 
     @Test
     public void WhenLoadByTitleInvoked_LoadedMoviesAreReturned() {
+        MockHttpServletResponse mockResponse = new MockHttpServletResponse();
 
-        /**
-        Movie m1 = Movie.builder().id("id1").title("title1").build();
-        Movie m2 = Movie.builder().id("id2").title("title2").build();
+        assertThatCode(()->movieController.generateCSVByTitle(GenerateCSVByTitle.of("Star"), mockResponse))
+                .doesNotThrowAnyException();
 
-        when(movieService.loadMoviesByTitle(any()))
-                .thenReturn(List.of(m1, m2));
-
-        ResponseEntity<List<MovieDTO>> responseEntity = movieController.loadByTitle(
-                LoadByTitleRequest.of("Star"));
-
-        assertThat(responseEntity.getStatusCode().is2xxSuccessful()).isTrue();
-
-        List<MovieDTO> response = responseEntity.getBody();
-        assertThat(response).hasSize(2);
-
-        verify(movieService).loadMoviesByTitle("Star");
-         **/
-
+        assertThat(mockResponse.getHeader(HttpHeaders.CONTENT_DISPOSITION)).isNotEmpty();
+        assertThat(mockResponse.getHeader(HttpHeaders.CONTENT_DISPOSITION))
+                .matches(Pattern.compile("attachment; filename=\"Star_.*"));
 
     }
 

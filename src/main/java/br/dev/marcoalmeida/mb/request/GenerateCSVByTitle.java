@@ -9,6 +9,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor(staticName = "of")
 @NoArgsConstructor
-public class LoadByTitleRequest {
+public class GenerateCSVByTitle {
     private String title;
 }
