@@ -31,18 +31,18 @@ public class MovieService {
 
     private final MovieRepository movieRepository;
 
-    public List<Movie> loadMoviesByTitle(String title) {
+    public List<Movie> generateByTitle(String title) {
         return Optional.ofNullable(omdbClient.search(title).getBody())
                 .map(this::saveResults)
                 .orElse(List.of());
     }
 
-    public void loadMoviesByTitle(String title, Writer writer) throws CsvRequiredFieldEmptyException, CsvDataTypeMismatchException {
+    public void generateCSVByTitle(String title, Writer writer) throws CsvRequiredFieldEmptyException, CsvDataTypeMismatchException {
         StatefulBeanToCsv<MovieDTO> statefulBeanToCsv = new StatefulBeanToCsvBuilder<MovieDTO>(writer)
                 .withSeparator(CSVWriter.DEFAULT_SEPARATOR)
                 .build();
 
-        statefulBeanToCsv.write(loadMoviesByTitle(title).stream()
+        statefulBeanToCsv.write(generateByTitle(title).stream()
                 .map(MovieMapper.INSTANCE::convert)
                 .toList());
 
