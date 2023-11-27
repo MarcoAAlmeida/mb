@@ -47,8 +47,18 @@ public class MovieService {
                         .rating(info.getImdbRating())
                         .votes(Long.parseLong(info.getImdbVotes().replace(",","")))
                         .posterUrl(resultItem.getPoster())
-                        .releaseYear(info.getYear())
+                        .releaseYear(getReleaseYear(info))
                 .build());
     }
+    
+    private static Long getReleaseYear(InfoDTO info) {
+        try {
+            return Long.parseLong(info.getYear());
+        }
+        catch(NumberFormatException e) {
+            return null;
+        }
+    }
+
 
 }
