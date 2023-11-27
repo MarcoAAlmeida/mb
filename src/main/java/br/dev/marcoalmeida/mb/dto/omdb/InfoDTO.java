@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class InfoDTO {
     @JsonProperty("Year")
-    protected Long year;
+    protected String year;
 
     @JsonProperty("BoxOffice")
     protected String boxOffice;
