@@ -2,6 +2,8 @@ package br.dev.marcoalmeida.mb.service;
 
 import br.dev.marcoalmeida.mb.domain.Movie;
 import br.dev.marcoalmeida.mb.repository.MovieRepository;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockserver.client.MockServerClient;
 import org.mockserver.model.MediaType;
@@ -30,37 +32,19 @@ public class MovieServiceTest {
 
     private MockServerClient mockServerClient;
 
+    @BeforeEach
+    public void setup(){
+        movieRepository.deleteAll();
+    }
+    
     @Test
     public void WhenKeywordSupplied_MoviesArePopulated() throws IOException {
-        mockServerClient
-                .when(request()
-                    .withQueryStringParameter("s", "Star")
-                    .withMethod("GET")
-                ).respond(response()
-                    .withStatusCode(200)
-                    .withContentType(MediaType.APPLICATION_JSON)
-                    .withBody(Files.readString(Path.of("src/test/resources/omdb/search.json")))
-                );
+    	
+    	mockServerClient("s", "Star", Files.readString(Path.of("src/test/resources/omdb/search.json")));
 
-        mockServerClient
-                .when(request()
-                        .withQueryStringParameter("i", "tt0076759")
-                        .withMethod("GET")
-                ).respond(response()
-                        .withStatusCode(200)
-                        .withContentType(MediaType.APPLICATION_JSON)
-                        .withBody(Files.readString(Path.of("src/test/resources/omdb/tt0076759.json")))
-                );
+    	mockServerClient("i", "tt0076759", Files.readString(Path.of("src/test/resources/omdb/tt0076759.json")));
 
-        mockServerClient
-                .when(request()
-                        .withQueryStringParameter("i", "tt0080684")
-                        .withMethod("GET")
-                ).respond(response()
-                        .withStatusCode(200)
-                        .withContentType(MediaType.APPLICATION_JSON)
-                        .withBody(Files.readString(Path.of("src/test/resources/omdb/tt0080684.json")))
-                );
+    	mockServerClient("i", "tt0080684", Files.readString(Path.of("src/test/resources/omdb/tt0080684.json")));
 
 
         assertThat(movieRepository.count()).isEqualTo(0L);
@@ -76,5 +60,52 @@ public class MovieServiceTest {
 
         Optional<Movie> m2 = movieRepository.findByTitle("Star Wars: Episode V - The Empire Strikes Back");
         assertThat(m2).isPresent();
+        
+        
+        Movie movieOne = m1.get();
+        assertMovie(movieOne, "tt0076759", "Star Wars: Episode IV - A New Hope", 8.6, 1420107, "https://m.media-amazon.com/images/M/MV5BOTA5NjhiOTAtZWM0ZC00MWNhLThiMzEtZDFkOTk2OTU1ZDJkXkEyXkFqcGdeQXVyMTA4NDI1NTQx._V1_SX300.jpg", 1977);
+
+        Movie movieTwo = m2.get();
+        assertMovie(movieTwo, "tt0080684", "Star Wars: Episode V - The Empire Strikes Back", 8.7, 1349018, "https://m.media-amazon.com/images/M/MV5BYmU1NDRjNDgtMzhiMi00NjZmLTg5NGItZDNiZjU5NTU4OTE0XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg", 1980);
+        
     }
-}
+    
+    @Test
+    public void WhenReleaseYearComesToBadFormat_MoviesArePopulatedWithoutExeption() throws IOException {
+    	mockServerClient("s", "Chainsaw", Files.readString(Path.of("src/test/resources/omdb/searchChainsaw.json")));
+    	
+    	mockServerClient("i", "tt13616990", Files.readString(Path.of("src/test/resources/omdb/tt13616990.json")));
+    	
+    	List<Movie> movie = movieService.generateByTitle("Chainsaw");
+
+    	assertThat(movie).isNotEmpty();
+    	
+    	Optional<Movie> m1 = movieRepository.findByTitle("Chainsaw Man");
+    	
+    	Movie chainsaw = m1.get();
+    	
+    	assertThat(chainsaw.getReleaseYear()).isNull();
+    
+    }
+    
+    private void mockServerClient(String parameterSearch, String parameterMovie, String fileData) {
+    	mockServerClient
+		    .when(request()
+		        .withQueryStringParameter(parameterSearch, parameterMovie)
+		        .withMethod("GET")
+		    ).respond(response()
+		        .withStatusCode(200)
+		        .withContentType(MediaType.APPLICATION_JSON)
+		        .withBody(fileData)
+		    );
+	}
+    
+    private void assertMovie(Movie movie, String id, String title, double rating, long votes, String posterUrl, long releaseYear) {
+        assertThat(movie.getId()).isEqualTo(id);
+        assertThat(movie.getTitle()).isEqualTo(title);
+        assertThat(movie.getRating()).isEqualTo(rating);
+        assertThat(movie.getVotes()).isEqualTo(votes);
+        assertThat(movie.getPosterUrl()).isEqualTo(posterUrl);
+        assertThat(movie.getReleaseYear()).isEqualTo(releaseYear);
+    }
+ }

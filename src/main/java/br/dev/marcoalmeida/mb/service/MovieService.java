@@ -62,13 +62,24 @@ public class MovieService {
 
     private Movie save(SearchResultDTO resultItem, InfoDTO info) {
         return movieRepository.save(Movie.builder()
-                .id(resultItem.getImdbID())
-                .title(resultItem.getTitle())
-                .rating(info.getImdbRating())
-                .votes(Long.parseLong(info.getImdbVotes().replace(",", "")))
-                .posterUrl(resultItem.getPoster())
-                .releaseYear(info.getYear())
+                        .id(resultItem.getImdbID())
+                        .title(resultItem.getTitle())
+                        .rating(info.getImdbRating())
+                        .votes(Long.parseLong(info.getImdbVotes().replace(",","")))
+                        .posterUrl(resultItem.getPoster())
+                        .releaseYear(getReleaseYear(info))
+
                 .build());
     }
+    
+    private static Long getReleaseYear(InfoDTO info) {
+        try {
+            return Long.parseLong(info.getYear());
+        }
+        catch(NumberFormatException e) {
+            return null;
+        }
+    }
+
 
 }
