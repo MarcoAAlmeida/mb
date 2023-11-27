@@ -2,110 +2,77 @@ package br.dev.marcoalmeida.mb.service;
 
 import br.dev.marcoalmeida.mb.domain.Movie;
 import br.dev.marcoalmeida.mb.repository.MovieRepository;
-
-import org.junit.jupiter.api.BeforeEach;
+import br.dev.marcoalmeida.mb.utils.RandomUtils;
+import br.dev.marcoalmeida.mb.utils.ReflexivePair;
 import org.junit.jupiter.api.Test;
-import org.mockserver.client.MockServerClient;
-import org.mockserver.model.MediaType;
-import org.mockserver.springtest.MockServerTest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockserver.model.HttpRequest.request;
-import static org.mockserver.model.HttpResponse.response;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-@SpringBootTest
-@MockServerTest("omdb.server.url=http://localhost:${mockServerPort}")
+
+@ExtendWith(MockitoExtension.class)
 public class MovieServiceTest {
-
-    @Autowired
+    @Mock
     private MovieRepository movieRepository;
-    @Autowired
+
+    @InjectMocks
     private MovieService movieService;
 
-    private MockServerClient mockServerClient;
+    private static Long MOVIE_COUNT = 10L;
+    private static Integer RANDOM_PAGE_1 = 1;
+    private static Integer RANDOM_PAGE_2 = 2;
 
-    @BeforeEach
-    public void setup(){
-        movieRepository.deleteAll();
-    }
-    
+    private static Movie MOVIE_1 = Movie.builder().id("id_1").build();
+    private static Movie MOVIE_2 = Movie.builder().id("id_2").build();
+
+    private static Movie MOVIE_3 = Movie.builder().id("id_3").build();
+
     @Test
-    public void WhenKeywordSupplied_MoviesArePopulated() throws IOException {
-    	
-    	mockServerClient("s", "Star", Files.readString(Path.of("src/test/resources/omdb/search.json")));
+    public void WhenSelectRandomReflexivePair_ValidPairReturned() {
+        try (MockedStatic<RandomUtils> randomUtilsMockedStatic = mockStatic(RandomUtils.class)){
+            randomUtilsMockedStatic.when(() -> RandomUtils.randomNaturalNumberUpTo(MOVIE_COUNT))
+                    .thenReturn(RANDOM_PAGE_1);
 
-    	mockServerClient("i", "tt0076759", Files.readString(Path.of("src/test/resources/omdb/tt0076759.json")));
+            randomUtilsMockedStatic.when(() -> RandomUtils.randomNaturalNumberUpTo(MOVIE_COUNT-1))
+                    .thenReturn(RANDOM_PAGE_2);
 
-    	mockServerClient("i", "tt0080684", Files.readString(Path.of("src/test/resources/omdb/tt0080684.json")));
+            when(movieRepository.countByIdNotIn(eq(Set.of()))).thenReturn(MOVIE_COUNT);
+            when(movieRepository.countByIdNotIn(eq(Set.of(MOVIE_1.getId())))).thenReturn(MOVIE_COUNT-1);
 
+            when(movieRepository.findByIdNotIn(eq(Set.of()), eq(PageRequest.of(RANDOM_PAGE_1, 1))))
+                    .thenReturn(new PageImpl<>(List.of(MOVIE_1)));
 
-        assertThat(movieRepository.count()).isEqualTo(0L);
+            when(movieRepository.findByIdNotIn(eq(Set.of(MOVIE_1.getId())), eq(PageRequest.of(RANDOM_PAGE_2, 1))))
+                    .thenReturn(new PageImpl<>(List.of(MOVIE_2)))
+                    .thenReturn(new PageImpl<>(List.of(MOVIE_3)));
 
-        List<Movie> movies = movieService.generateByTitle("Star");
+            Optional<ReflexivePair<Movie>> selectedMovie = movieService.findNewPair(Set.of(new ReflexivePair<>(MOVIE_1, MOVIE_2)));
 
-        assertThat(movies).isNotEmpty();
-        assertThat(movieRepository.count()).isEqualTo(2);
-        assertThat(movies.size()).isEqualTo(2);
+            assertThat(selectedMovie).isPresent();
+            assertThat(selectedMovie.get()).isEqualTo(new ReflexivePair<Movie>(MOVIE_3, MOVIE_1));
 
-        Optional<Movie> m1 = movieRepository.findByTitle("Star Wars: Episode IV - A New Hope");
-        assertThat(m1).isPresent();
-
-        Optional<Movie> m2 = movieRepository.findByTitle("Star Wars: Episode V - The Empire Strikes Back");
-        assertThat(m2).isPresent();
-        
-        
-        Movie movieOne = m1.get();
-        assertMovie(movieOne, "tt0076759", "Star Wars: Episode IV - A New Hope", 8.6, 1420107, "https://m.media-amazon.com/images/M/MV5BOTA5NjhiOTAtZWM0ZC00MWNhLThiMzEtZDFkOTk2OTU1ZDJkXkEyXkFqcGdeQXVyMTA4NDI1NTQx._V1_SX300.jpg", 1977);
-
-        Movie movieTwo = m2.get();
-        assertMovie(movieTwo, "tt0080684", "Star Wars: Episode V - The Empire Strikes Back", 8.7, 1349018, "https://m.media-amazon.com/images/M/MV5BYmU1NDRjNDgtMzhiMi00NjZmLTg5NGItZDNiZjU5NTU4OTE0XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg", 1980);
-        
+            verify(movieRepository, times(4)).findByIdNotIn(any(), any());
+        }
     }
-    
-    @Test
-    public void WhenReleaseYearComesToBadFormat_MoviesArePopulatedWithoutExeption() throws IOException {
-    	mockServerClient("s", "Chainsaw", Files.readString(Path.of("src/test/resources/omdb/searchChainsaw.json")));
-    	
-    	mockServerClient("i", "tt13616990", Files.readString(Path.of("src/test/resources/omdb/tt13616990.json")));
-    	
-    	List<Movie> movie = movieService.generateByTitle("Chainsaw");
 
-    	assertThat(movie).isNotEmpty();
-    	
-    	Optional<Movie> m1 = movieRepository.findByTitle("Chainsaw Man");
-    	
-    	Movie chainsaw = m1.get();
-    	
-    	assertThat(chainsaw.getReleaseYear()).isNull();
+
     
-    }
-    
-    private void mockServerClient(String parameterSearch, String parameterMovie, String fileData) {
-    	mockServerClient
-		    .when(request()
-		        .withQueryStringParameter(parameterSearch, parameterMovie)
-		        .withMethod("GET")
-		    ).respond(response()
-		        .withStatusCode(200)
-		        .withContentType(MediaType.APPLICATION_JSON)
-		        .withBody(fileData)
-		    );
-	}
-    
-    private void assertMovie(Movie movie, String id, String title, double rating, long votes, String posterUrl, long releaseYear) {
-        assertThat(movie.getId()).isEqualTo(id);
-        assertThat(movie.getTitle()).isEqualTo(title);
-        assertThat(movie.getRating()).isEqualTo(rating);
-        assertThat(movie.getVotes()).isEqualTo(votes);
-        assertThat(movie.getPosterUrl()).isEqualTo(posterUrl);
-        assertThat(movie.getReleaseYear()).isEqualTo(releaseYear);
-    }
- }
+
+
+}
