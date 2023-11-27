@@ -15,7 +15,7 @@ public class Round {
 
     @Id
     @EqualsAndHashCode.Include
-    private String id;
+    private Integer id;
 
     @ManyToOne(optional = false)
     Game game;

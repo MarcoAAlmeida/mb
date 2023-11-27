@@ -16,7 +16,7 @@ public class Game {
 
     @Id
     @EqualsAndHashCode.Include
-    private String id;
+    private Integer id;
 
     @Column(nullable = false)
     private LocalDateTime startedAt;
