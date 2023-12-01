@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+
+import static br.dev.marcoalmeida.mb.utils.FormatterUtils.formatter;
 
 @RestController
 @RequestMapping("movie")
@@ -33,7 +34,7 @@ public class MovieController {
 
     private String getTimestampedFileName(String title) {
         return String.format(FILE_MASK, title,
-                DateTimeFormatter.ofPattern("yyyyMMddHHmmss").format(LocalDateTime.now()));
+                formatter().format(LocalDateTime.now()));
     }
 
 

@@ -1,0 +1,56 @@
+package br.dev.marcoalmeida.mb;
+
+import br.dev.marcoalmeida.mb.domain.Game;
+import br.dev.marcoalmeida.mb.domain.Movie;
+import br.dev.marcoalmeida.mb.domain.Player;
+import br.dev.marcoalmeida.mb.domain.Round;
+import br.dev.marcoalmeida.mb.dto.GameOverDTO;
+import br.dev.marcoalmeida.mb.dto.NewGameDTO;
+
+import java.time.LocalDateTime;
+
+import static br.dev.marcoalmeida.mb.utils.FormatterUtils.formatter;
+
+public abstract class MbAbstractTest {
+    protected static Long MOVIE_COUNT = 10L;
+    protected static Integer RANDOM_PAGE_1 = 1;
+    protected static Integer RANDOM_PAGE_2 = 2;
+    protected static Movie MOVIE_1 = Movie.builder().id("id_1").build();
+    protected static Movie MOVIE_2 = Movie.builder().id("id_2").build();
+    protected static Movie MOVIE_3 = Movie.builder().id("id_3").build();
+
+    protected static Integer PLAYER1_ID = 1;
+
+    protected static Player PLAYER_1 = Player.builder()
+            .id(PLAYER1_ID)
+            .name("p1")
+            .build();
+    public static final LocalDateTime STARTED_AT = LocalDateTime.of(2023, 11, 28, 0, 0, 0);
+    public static final LocalDateTime FINISHED_AT = LocalDateTime.of(2023, 11, 28, 0, 0, 1);
+    protected static Integer GAME1_ID = 2;
+    protected static Game GAME1 = Game.builder()
+            .id(GAME1_ID)
+            .player(PLAYER_1)
+            .startedAt(STARTED_AT)
+            .build();
+    protected Round ROUND1 = Round.builder()
+            .game(GAME1)
+            .left(MOVIE_1)
+            .right(MOVIE_2)
+            .build();
+
+    protected static NewGameDTO NEW_GAME_DTO = NewGameDTO.of(GAME1_ID);
+
+    protected static GameOverDTO GAME_OVER_DTO = GameOverDTO.builder()
+            .gameId(GAME1_ID)
+            .startedAt(formatter().format(STARTED_AT))
+            .finishedAt(formatter().format(FINISHED_AT))
+            .score(1)
+            .errorCount(0)
+            .roundCount(1)
+            .build();
+
+
+
+
+}

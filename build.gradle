@@ -92,6 +92,8 @@ jacocoTestReport {
 		classDirectories.setFrom(files(classDirectories.files.collect {
 			fileTree(dir: it, exclude: [
 					"br/dev/marcoalmeida/mb/MbApplication.class",
+					"**/**Mapper.class",
+					"**/**MapperImpl.class",
 					"**/**DTO.class"
 			])
 		}))

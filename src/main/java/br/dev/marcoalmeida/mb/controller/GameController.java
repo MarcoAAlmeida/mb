@@ -1,44 +1,40 @@
 package br.dev.marcoalmeida.mb.controller;
 
+import br.dev.marcoalmeida.mb.dto.GameOverDTO;
+import br.dev.marcoalmeida.mb.dto.NewGameDTO;
+import br.dev.marcoalmeida.mb.service.GameService;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("game")
+@AllArgsConstructor
 public class GameController {
 
-    /**
-     *  purpose: creates a new game, and returns newly-created gameId
-     *
-     *  verb REST : POST
-     *
-     *  route : game/create/{playerId}
-     *
-     *  method : createGame(Integer playerId)
-     *
-     *  params : Integer playerId (path)
-     *
-     *  returns: NewGameDTO { gameId: 12213213 }
-     *
-     *  201 in case of successful
-     *  { gameId: 12321321 }
-     *
-     */
+    private final GameService gameService;
 
-    /**
-     *  purpose: creates a new game, and returns newly-created gameId
-     *
-     *  verb REST : POST
-     *
-     *  route : game/finish/{gameId}
-     *
-     *  method : finishGame(Integer gameId)
-     *
-     *  params : Integer playerId (path)
-     *
-     *  returns:
-     *
-     *  void
-     *
-     *  200 in case of successful
-     *
-     *
-     */
+    @PostMapping(value = "/start/{playerId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<NewGameDTO> start(@PathVariable(required = true) Integer playerId) {
+        return new ResponseEntity<>(gameService.start(playerId), HttpStatus.CREATED);
+
+    }
+
+    @PutMapping(value = "/stop/{gameId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<GameOverDTO> stop(@PathVariable(required = true) Integer gameId) {
+        return new ResponseEntity<>(gameService.stop(gameId), HttpStatus.OK);
+
+    }
+
+
+
+
 
     /**
      *  purpose: returns info about a finished Game

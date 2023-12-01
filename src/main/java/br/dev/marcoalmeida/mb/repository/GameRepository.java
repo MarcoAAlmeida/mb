@@ -8,5 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface GameRepository extends CrudRepository<Game, Integer> {
-    Optional<Game> findByPlayer_IdAndFinishedAtIsNull(Integer playerId);
+    Long countByPlayer_IdAndFinishedAtIsNull(Integer playerId);
+    Optional<Game> findByIdAndFinishedAtIsNull(Integer gameId);
 }
