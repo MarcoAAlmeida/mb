@@ -49,7 +49,7 @@ public class MovieServiceComponentTest {
 
         assertThat(movieRepository.count()).isEqualTo(0L);
 
-        List<Movie> movies = movieService.generateByTitle("Star");
+        List<Movie> movies = movieService.generateByTitleForMultiplePages("Star", 1L);
 
         assertThat(movies).isNotEmpty();
         assertThat(movieRepository.count()).isEqualTo(2);
@@ -76,7 +76,7 @@ public class MovieServiceComponentTest {
     	
     	mockServerClient("i", "tt13616990", Files.readString(Path.of("src/test/resources/omdb/tt13616990.json")));
     	
-    	List<Movie> movie = movieService.generateByTitle("Chainsaw");
+    	List<Movie> movie = movieService.generateByTitleForMultiplePages("Chainsaw", 1L);
 
     	assertThat(movie).isNotEmpty();
     	
