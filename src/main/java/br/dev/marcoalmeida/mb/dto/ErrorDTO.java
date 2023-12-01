@@ -3,8 +3,10 @@ package br.dev.marcoalmeida.mb.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor(staticName = "of")
-public class NewGameDTO {
-    private Integer gameId;
+public class ErrorDTO {
+    List<String> errors;
 }

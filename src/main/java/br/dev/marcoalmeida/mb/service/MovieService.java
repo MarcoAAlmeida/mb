@@ -89,6 +89,7 @@ public class MovieService {
                 .findFirst();
     }
     private List<Movie> saveResults(ResultsDTO resultsDTO) {
+        log.info("resultsDTO123131 [{}]", resultsDTO);
         return resultsDTO.getResults().stream()
                 .flatMap(resultItem -> getAdditionalInfo(resultItem).stream())
                 .collect(Collectors.toList());

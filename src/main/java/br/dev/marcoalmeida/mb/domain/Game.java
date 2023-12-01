@@ -16,6 +16,8 @@ public class Game {
 
     @Id
     @EqualsAndHashCode.Include
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="GAME_SEQ")
+    @SequenceGenerator(name="GAME_SEQ", allocationSize=1)
     private Integer id;
 
     @Column(nullable = false)
