@@ -19,7 +19,7 @@ public class Round {
     @SequenceGenerator(name="ROUND_SEQ", allocationSize=1)
     private Integer id;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY )
     Game game;
 
     @OneToOne(optional = false)

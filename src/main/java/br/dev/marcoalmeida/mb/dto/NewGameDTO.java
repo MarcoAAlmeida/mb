@@ -7,4 +7,5 @@ import lombok.Data;
 @AllArgsConstructor(staticName = "of")
 public class NewGameDTO {
     private Integer gameId;
+    private Integer roundId;
 }

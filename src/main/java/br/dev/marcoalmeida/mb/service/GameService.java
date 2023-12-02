@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static br.dev.marcoalmeida.mb.utils.FormatterUtils.formatterMedium;
+import static br.dev.marcoalmeida.mb.utils.FormatterUtils.formatterUI;
 
 @Service
 @AllArgsConstructor
@@ -47,6 +47,13 @@ public class GameService {
 
     }
 
+    public GameOverDTO getGameOver(Integer gameId) throws MbException {
+        return gameRepository.findByIdAndFinishedAtIsNotNull(gameId)
+                .flatMap(this::getOptionalGameOverDTO)
+                .orElseThrow(() -> new MbException(String.format(COULD_NOT_STOP_GAME, gameId)));
+
+    }
+
     private Optional<NewGameDTO> startWithPlayer(Player player) {
         if (gameRepository.countByPlayer_IdAndFinishedAtIsNull(player.getId()) != 0) {
             log.error("Player {} has unfinished games", player);
@@ -58,15 +65,18 @@ public class GameService {
                 .startedAt(LocalDateTime.now())
                 .build());
 
-        roundService.createNewRound(game.getId());
-
-        return Optional.of(NewGameDTO.of(game.getId()));
+        return roundService.createNewRound(game.getId())
+                .map(round -> NewGameDTO.of(game.getId(), round.getId()));
     }
 
     private Optional<GameOverDTO> stop(Game game) {
         game.setFinishedAt(LocalDateTime.now());
         gameRepository.save(game);
 
+        return getOptionalGameOverDTO(game);
+    }
+
+    private Optional<GameOverDTO> getOptionalGameOverDTO(Game game) {
         roundRepository.findByGame_IdAndAnsweredAtIsNull(game.getId())
                 .ifPresent(lastRound -> {
                     lastRound.setAnsweredAt(LocalDateTime.now());
@@ -75,11 +85,11 @@ public class GameService {
 
         return Optional.of(GameOverDTO.builder()
                 .gameId(game.getId())
-                .startedAt(formatterMedium().format(game.getStartedAt()))
-                .finishedAt(formatterMedium().format(game.getFinishedAt()))
-                .roundCount(game.getRounds().size())
-                .errorCount(0)
-                .score(0)
+                .startedAt(formatterUI().format(game.getStartedAt()))
+                .finishedAt(formatterUI().format(game.getFinishedAt()))
+                .roundCount(roundRepository.countByGame_Id(game.getId()).intValue())
+                .errorCount(roundRepository.countByGame_IdAndAnsweredAtIsNotNullAndCorrectIsFalse(game.getId()).intValue())
+                .score(roundRepository.countByGame_IdAndAnsweredAtIsNotNullAndCorrectIsTrue(game.getId()).intValue())
                 .build());
     }
 
