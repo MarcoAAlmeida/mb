@@ -52,11 +52,11 @@ public class GameServiceTest extends MbAbstractTest {
 
     @Test
     public void WhenGameStop_GameOverDTOReturned() {
-        // TODO : implement
+        // TODO
     }
 
     @Test
-    public void WhenGameStartPlayerNotFound_MbExceptionGetsThrown(){
+    public void WhenGameStartPlayerNotFound_MbExceptionIsThrown(){
         when(playerRepository.findById(PLAYER1_ID)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> gameService.start(PLAYER1_ID))
@@ -65,14 +65,23 @@ public class GameServiceTest extends MbAbstractTest {
     }
 
     @Test
-    public void WhenGameStopPlayerNotFound_MbExceptionGetsThrown(){
-        // TODO : implement
+    public void WhenGameStopPlayerNotFound_MbExceptionIsThrown(){
+        // TODO
     }
 
     @Test
-    public void WhenGameStartPlayerHasUnfinishedGame_MbExceptionGetsThrown(){
-        // TODO : implement
+    public void WhenGameStartPlayerHasUnfinishedGame_MbExceptionIsThrown(){
+        // TODO
     }
 
+    @Test
+    public void WhenGameOverExists_GameOverDTOReturned(){
+        // TODO
+    }
+
+    @Test
+    public void WhenGameOverDoesNotExist_MbExceptionIsThrown(){
+        // TODO
+    }
 
 }

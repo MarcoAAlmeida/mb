@@ -1,39 +1,35 @@
 package br.dev.marcoalmeida.mb.controller;
 
+import br.dev.marcoalmeida.mb.dto.AnswerDTO;
+import br.dev.marcoalmeida.mb.dto.ChoiceEnum;
+import br.dev.marcoalmeida.mb.dto.NextRoundDTO;
+import br.dev.marcoalmeida.mb.service.RoundService;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+
+@RestController
+@RequestMapping("round")
+@AllArgsConstructor
 public class RoundController {
+    private final RoundService roundService;
 
-    /**
-     *  purpose: returns all the info needed to display next round
-     *
-     *  verb REST : GET
-     *
-     *  route : round/{roundId}
-     *
-     *  method : getRound(Integer roundId)
-     *
-     *  params : Integer roundId (path)
-     *
-     *  returns: 200 NextRoundDTO
-     *
-     */
+    @GetMapping(value = "/next/{nextRoundId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<NextRoundDTO> getNextRound(@PathVariable(required = true) Integer nextRoundId) {
+        return new ResponseEntity<>(roundService.getNextRound(nextRoundId), HttpStatus.OK);
 
-    /**
-     *  purpose: evaluate Player choice, and returns nextRoundId, or fails
-     *
-     *  verb REST : PUT
-     *
-     *  route : round/{roundId}/answer/{choiceEnum}
-     *
-     *  e.g round/123/answer/LEFT
-     *
-     *  method : evaluate(Integer roundId,choice)
-     *
-     *  params : ChoiceEnum
-     *
-     *  returns: 200 AnswerRoundDTO
-     *
-     *  422 - indicates that game is over, client must call /game/over/{gameId}
-     *
-     */
+    }
 
+    @PutMapping(value = "/{roundId}/answer/{choice}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<AnswerDTO> getAnswer(@PathVariable(required = true) Integer roundId, ChoiceEnum choice) {
+        return new ResponseEntity<>(roundService.getAnswer(roundId, choice), HttpStatus.OK);
+
+    }
 }

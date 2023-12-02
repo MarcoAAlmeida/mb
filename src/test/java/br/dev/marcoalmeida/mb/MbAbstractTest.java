@@ -6,10 +6,13 @@ import br.dev.marcoalmeida.mb.domain.Player;
 import br.dev.marcoalmeida.mb.domain.Round;
 import br.dev.marcoalmeida.mb.dto.GameOverDTO;
 import br.dev.marcoalmeida.mb.dto.NewGameDTO;
+import br.dev.marcoalmeida.mb.dto.NextRoundDTO;
+import br.dev.marcoalmeida.mb.mapper.MovieMapper;
 
 import java.time.LocalDateTime;
 
 import static br.dev.marcoalmeida.mb.utils.FormatterUtils.formatter;
+import static br.dev.marcoalmeida.mb.utils.FormatterUtils.formatterUI;
 
 public abstract class MbAbstractTest {
     protected static Long MOVIE_COUNT = 10L;
@@ -33,13 +36,17 @@ public abstract class MbAbstractTest {
             .player(PLAYER_1)
             .startedAt(STARTED_AT)
             .build();
-    protected Round ROUND1 = Round.builder()
+
+    protected static Integer ROUND1_ID = 1;
+
+    protected static Round ROUND1 = Round.builder()
+            .id(ROUND1_ID)
             .game(GAME1)
             .left(MOVIE_1)
             .right(MOVIE_2)
             .build();
 
-    protected static NewGameDTO NEW_GAME_DTO = NewGameDTO.of(GAME1_ID);
+    protected static NewGameDTO NEW_GAME_DTO = NewGameDTO.of(GAME1_ID, ROUND1_ID);
 
     protected static GameOverDTO GAME_OVER_DTO = GameOverDTO.builder()
             .gameId(GAME1_ID)
@@ -50,7 +57,15 @@ public abstract class MbAbstractTest {
             .roundCount(1)
             .build();
 
-
-
-
+    protected static NextRoundDTO NEXT_ROUND_DTO = NextRoundDTO.builder()
+        .gameId(ROUND1.getGame().getId())
+            .playerId(PLAYER1_ID)
+            .roundId(ROUND1_ID)
+            .roundCount(1)
+            .errorCount(0)
+            .score(0)
+            .startedAt(formatterUI().format(STARTED_AT))
+            .left(MovieMapper.INSTANCE.convert(MOVIE_1))
+            .right(MovieMapper.INSTANCE.convert(MOVIE_2))
+            .build();
 }

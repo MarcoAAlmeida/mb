@@ -51,6 +51,12 @@ public class GameControllerTests extends MbAbstractTest {
         verify(gameService).stop(GAME1_ID);
     }
 
+    @Test
+    public void WhenGameOverRequested_GameOverDTOReturned() {
+        // TODO
+    }
+
+
 
 
 }

@@ -2,6 +2,7 @@ package br.dev.marcoalmeida.mb.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Transient;
 import lombok.*;
 
 @Entity
@@ -25,5 +26,10 @@ public class Movie {
     private Long votes;
 
     private Long releaseYear;
+
+    @Transient
+    public Double rank(){
+        return rating * votes;
+    }
 
 }

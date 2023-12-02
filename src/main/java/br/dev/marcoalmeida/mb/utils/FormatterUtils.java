@@ -10,7 +10,7 @@ public class FormatterUtils {
         return DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
     }
 
-    public static DateTimeFormatter formatterMedium(){
+    public static DateTimeFormatter formatterUI(){
         return DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM);
     }
 }
