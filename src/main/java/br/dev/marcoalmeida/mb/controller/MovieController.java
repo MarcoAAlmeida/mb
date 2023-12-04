@@ -29,7 +29,7 @@ public class MovieController {
         response.addHeader(HttpHeaders.CONTENT_DISPOSITION,
                 String.format("attachment; filename=\"%s\"", getTimestampedFileName(request.getTitle())));
 
-        movieService.generateCSVByTitle(request.getTitle(), response.getWriter());
+        movieService.generateCSVByTitle(request.getTitle(), request.getPage(), response.getWriter());
     }
 
     private String getTimestampedFileName(String title) {

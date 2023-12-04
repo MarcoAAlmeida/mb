@@ -11,4 +11,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class GenerateCSVByTitle {
     private String title;
+    private Long page;
 }
