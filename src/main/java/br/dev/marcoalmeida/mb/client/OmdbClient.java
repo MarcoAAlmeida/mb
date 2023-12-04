@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name="omdb", url="${omdb.server.url}")
 
 public interface OmdbClient {
-    @RequestMapping(method = RequestMethod.GET, value = "/?page=1&apikey=fa212ffa")
-    ResponseEntity<ResultsDTO> search(@RequestParam(name = "s") String title);
+    @RequestMapping(method = RequestMethod.GET, value = "/?apikey=fa212ffa")
+    ResponseEntity<ResultsDTO> search(@RequestParam(name = "s") String title,
+    								  @RequestParam(name= "page") Long page
+    		);
 
     @RequestMapping(method = RequestMethod.GET, value = "/?apikey=fa212ffa")
     ResponseEntity<InfoDTO> getInfo(@RequestParam(name = "i") String imdbId);
