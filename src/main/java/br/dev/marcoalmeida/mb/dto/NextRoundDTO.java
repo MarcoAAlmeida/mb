@@ -1,13 +1,17 @@
 package br.dev.marcoalmeida.mb.dto;
 
 import br.dev.marcoalmeida.mb.dto.csv.MovieDTO;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
 @EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
 public class NextRoundDTO {
     private Integer playerId;
     private Integer gameId;

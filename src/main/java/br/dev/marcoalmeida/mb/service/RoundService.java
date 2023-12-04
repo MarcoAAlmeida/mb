@@ -31,7 +31,7 @@ public class RoundService {
     private static final Integer MAX_ERRORS = 3;
 
     private static final String NEXT_ROUND_NOT_FOUND = "could not find unanswered Round with id [%s]";
-    private static final String COULD_NOT_COMPUTE_NEXT = "could not compute next round for roundId [%s] choice [%s], is the game over?";
+    private static final String COULD_NOT_COMPUTE_NEXT = "could not compute next round for roundId [%s], is the game over?";
     private final GameRepository gameRepository;
     private final RoundRepository roundRepository;
 

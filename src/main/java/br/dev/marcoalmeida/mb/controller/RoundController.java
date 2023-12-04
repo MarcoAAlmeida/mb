@@ -28,7 +28,7 @@ public class RoundController {
     }
 
     @PutMapping(value = "/{roundId}/answer/{choice}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AnswerDTO> getAnswer(@PathVariable(required = true) Integer roundId, ChoiceEnum choice) {
+    public ResponseEntity<AnswerDTO> getAnswer(@PathVariable(required = true) Integer roundId, @PathVariable(required = true) ChoiceEnum choice) {
         return new ResponseEntity<>(roundService.getAnswer(roundId, choice), HttpStatus.OK);
 
     }
