@@ -3,66 +3,59 @@ package br.dev.marcoalmeida.mb.dto.omdb;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 @Data
+@Slf4j
 public class InfoDTO {
     @JsonProperty("Year")
-    protected String year;
+    protected Long year;
 
     @JsonProperty("BoxOffice")
     protected String boxOffice;
 
     protected Double imdbRating;
-    protected String imdbVotes;
+    protected Long imdbVotes;
 
     @JsonCreator
     public InfoDTO(@JsonProperty("Year") String year,
                    @JsonProperty("BoxOffice") String boxOffice,
                    @JsonProperty("imdbRating") String imdbRating,
                    @JsonProperty("imdbVotes") String imdbVotes) {
-        this.year = year;
+        this.year = parseReleaseYear(year);
         this.boxOffice = boxOffice;
         this.imdbRating = parseImdbRating(imdbRating);
         this.imdbVotes = parseImdbVotes(imdbVotes);
     }
 
     private static Double parseImdbRating(String imdbRating) {
-        if ("N/A".equals(imdbRating)) {
-            return null;
-        }
-
         try {
             return Double.parseDouble(imdbRating);
+
         } catch (NumberFormatException e) {
+            log.error("while parsing imdbRating [{}] into Double", imdbRating);
             return null;
         }
     }
-    
-    private static String parseImdbVotes(String imdbVotes) {
-        if ("N/A".equals(imdbVotes)) {
-            return null;
-        } else {
-        	return imdbVotes;
-        }
 
-		/*
-		 * try { return Double.parseDouble(imdbVotes); } catch (NumberFormatException e)
-		 * { return null; }
-		 */
+    private static Long parseReleaseYear(String releaseYear) {
+        try {
+            return Long.parseLong(releaseYear);
+
+        } catch (NumberFormatException e) {
+            log.error("while parsing releaseYear [{}] into Long", releaseYear);
+            return null;
+        }
+    }
+
+    private static Long parseImdbVotes(String imdbVotes) {
+        try {
+            return Long.parseLong(imdbVotes);
+
+        } catch (NumberFormatException e) {
+            log.error("while parsing imdbVotes [{}] into Long", imdbVotes);
+            return null;
+        }
     }
 }
 
-
-/*
- * @Data public class InfoDTO {
- * 
- * @JsonProperty("Year") protected String year;
- * 
- * @JsonProperty("BoxOffice") protected String boxOffice;
- * 
- * protected Double imdbRating; protected String imdbVotes;
- * 
- * @JsonCreator public InfoDTO(String imdbRating) { try { this.imdbRating =
- * Double.parseDouble(imdbRating); } catch (NumberFormatException e) {
- * this.imdbRating = null; } } }
- */
