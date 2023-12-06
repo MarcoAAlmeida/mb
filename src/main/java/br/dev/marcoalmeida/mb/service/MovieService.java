@@ -16,6 +16,8 @@ import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import feign.FeignException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -37,8 +39,10 @@ public class MovieService {
 
 	private static Integer DEFAULT_OMDB_PAGE_SIZE = 10;
 	private final OmdbClient omdbClient;
-
 	private final MovieRepository movieRepository;
+
+	private final Validator validator;
+
 
 	private static final Long MAX_RETRIES = 1000L;
 	public void generateCSVByTitle(String title, Long pages, Writer writer){
@@ -83,6 +87,8 @@ public class MovieService {
 	}
 
 	private List<MovieDTO> makeAdditionalFetches(String title, ResultsDTO firstPage, Integer requestedPages) {
+		List<MovieDTO> fromFirstPage = parseResults(firstPage);
+
 		List<MovieDTO> fromAdditionalCalls = getMaxFetches(firstPage, requestedPages)
 				.map(maxPages -> IntStream.range(2, maxPages)
 						.mapToObj(page -> fetchStreamOfMovieDTOs(title, page))
@@ -90,10 +96,25 @@ public class MovieService {
 								.collect(Collectors.toList()))
 				.orElse(List.of());
 
-		List<MovieDTO> fromFirstPage = parseResults(firstPage);
 
 		return Stream.concat(fromFirstPage.stream(), fromAdditionalCalls.stream())
+				.filter(this::validateMovieDTO)
 				.collect(Collectors.toList());
+	}
+
+	private boolean validateMovieDTO(MovieDTO movieDTO){
+		Set<ConstraintViolation<MovieDTO>> violations = validator.validate(movieDTO);
+
+		if (violations.isEmpty()){
+			return true;
+		}
+
+		log.error("movieDTO [{}] had these violations [{}]", movieDTO, violations.stream()
+				.map(ConstraintViolation::getMessage)
+				.collect(Collectors.joining(",")));
+
+		return false;
+
 	}
 
 	private Stream<MovieDTO> fetchStreamOfMovieDTOs(String title, Integer page) {
@@ -155,9 +176,9 @@ public class MovieService {
 				.id(resultItem.getImdbID())
 				.title(resultItem.getTitle())
 				.rating(info.getImdbRating())
-				.votes(getImdbVotes(info))
+				.votes(info.getImdbVotes())
 				.posterUrl(resultItem.getPoster())
-				.releaseYear(getReleaseYear(info))
+				.releaseYear(info.getYear())
 				.build();
 	}
 
@@ -177,28 +198,4 @@ public class MovieService {
 						.of(RandomUtils.randomNaturalNumberUpTo(movieRepository.countByIdNotIn(setMovieId)), 1))
 				.get().findFirst();
 	}
-
-
-	private static Long getImdbVotes(InfoDTO info) {
-		return info.getImdbVotes() != null ? Long.parseLong(info.getImdbVotes().replace(",", "")) : null;
-		/*
-		 * try { return Long.parseLong(info.getImdbVotes().replace(",", "")); } catch
-		 * (NumberFormatException e) { return null; }
-		 */
-	}
-
-	private static Long getReleaseYear(InfoDTO info) {
-		try {
-			return Long.parseLong(info.getYear());
-		} catch (NumberFormatException e) {
-			return null;
-		}
-	}
-		
-
-		
-	
-		
-	
-
 }
