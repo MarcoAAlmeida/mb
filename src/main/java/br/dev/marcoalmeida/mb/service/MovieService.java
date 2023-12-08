@@ -179,6 +179,7 @@ public class MovieService {
 				.votes(info.getImdbVotes())
 				.posterUrl(resultItem.getPoster())
 				.releaseYear(info.getYear())
+				.plot(info.getPlot())
 				.build();
 	}
 

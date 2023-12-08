@@ -1,6 +1,7 @@
 package br.dev.marcoalmeida.mb.repository;
 
 import br.dev.marcoalmeida.mb.domain.Movie;
+import org.springframework.data.repository.query.Param;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
@@ -17,7 +18,7 @@ import java.util.Set;
 
 @Repository
 public interface MovieRepository extends CrudRepository<Movie, String>, JpaSpecificationExecutor<Movie> {
-    Optional<Movie> findByTitle(String title);
+    Optional<Movie> findByTitle(@Param("title")String title);
 
     default Page<Movie> findByIdNotIn(Set<String> ids, PageRequest pageRequest) {
         return findAll(idIsNotInSet(ids), pageRequest);

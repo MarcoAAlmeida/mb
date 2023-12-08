@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -32,6 +33,7 @@ public class MovieDTO {
     public static final String YEAR_FORMAT = "year must be in 4 digits format";
     public static final String NEEDS_RELEASE_YEAR = "needs release year";
     public static final String NEEDS_A_POSTER_URL = "needs a poster url to be displayed";
+    public static final String NEEDS_A_PLOT = "needs display the movie plot";
 
     @CsvBindByName
     @EqualsAndHashCode.Include
@@ -60,6 +62,14 @@ public class MovieDTO {
     private Long releaseYear;
 
     @CsvBindByName(column = "POSTER_URL")
-    @NotEmpty(message = NEEDS_A_POSTER_URL)
+    @Pattern(regexp = "https://m\\.media-amazon\\.com/images/M/[^\\s]*\\.jpg", message = NEEDS_A_POSTER_URL)
     private String posterUrl;
+    
+    @CsvBindByName(column = "PLOT")
+    @Pattern(regexp = "^(?!N/A$).*$", message = NEEDS_A_PLOT)
+    private String plot;
+
+    
+    
+    
 }

@@ -16,6 +16,9 @@ public class InfoDTO {
 
     protected Double imdbRating;
     protected Long imdbVotes;
+    
+    @JsonProperty("Plot")
+    protected String plot;
 
     @JsonCreator
     public InfoDTO(@JsonProperty("Year") String year,
@@ -50,7 +53,7 @@ public class InfoDTO {
 
     private static Long parseImdbVotes(String imdbVotes) {
         try {
-            return Long.parseLong(imdbVotes);
+            return Long.parseLong(imdbVotes.replace(",", ""));
 
         } catch (NumberFormatException e) {
             log.error("while parsing imdbVotes [{}] into Long", imdbVotes);
