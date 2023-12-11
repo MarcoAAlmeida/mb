@@ -1,4 +1,4 @@
-package br.dev.marcoalmeida.mb.service;
+/*package br.dev.marcoalmeida.mb.service;
 
 import br.dev.marcoalmeida.mb.domain.Movie;
 import br.dev.marcoalmeida.mb.repository.MovieRepository;
@@ -19,7 +19,32 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
+import static org.assertj.core.api.Assertions.assertThat;*/
+
+package br.dev.marcoalmeida.mb.service;
+
+import br.dev.marcoalmeida.mb.domain.Movie;
+import br.dev.marcoalmeida.mb.dto.csv.MovieDTO;
+import br.dev.marcoalmeida.mb.repository.MovieRepository;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockserver.client.MockServerClient;
+import org.mockserver.model.MediaType;
+import org.mockserver.springtest.MockServerTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import com.opencsv.bean.StatefulBeanToCsv;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
+import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockserver.model.HttpRequest.request;
+import static org.mockserver.model.HttpResponse.response;
 
 @SpringBootTest
 @MockServerTest("omdb.server.url=http://localhost:${mockServerPort}")
@@ -32,6 +57,7 @@ public class MovieServiceComponentTest {
 
     private MockServerClient mockServerClient;
     
+    
 
     @BeforeEach
     public void setup(){
@@ -39,7 +65,18 @@ public class MovieServiceComponentTest {
     }
     
     @Test
-    public void WhenTitleAreSupplied_MoviesComeWithPlot() throws IOException {
+    public void WhenTitleIsSupplied_MoviesComeWithPlot() throws IOException {
+    	mockServerClient
+	    .when(request()
+		        .withQueryStringParameter("s", "Star")
+		        .withMethod("GET")
+		    ).respond(response()
+		        .withStatusCode(200)
+		        .withContentType(MediaType.APPLICATION_JSON)
+		        .withBody(Files.readString(Path.of("src/test/resources/omdb/searchPlot.json")))
+		    );
+    	
+    	
     	mockServerClient
 	    .when(request()
 		        .withQueryStringParameter("i", "tt0076759")
@@ -50,13 +87,18 @@ public class MovieServiceComponentTest {
 		        .withBody(Files.readString(Path.of("src/test/resources/omdb/tt0076759.json")))
 		    );
     	
-    	Optional<Movie> movie = movieRepository.findByTitle("Star Wars: Episode IV - A New Hope");
-    	Movie movieData = movie.get();
-    	assertThat(movieData.getPlot()).isEqualTo("Luke Skywalker joins forces with a Jedi Knight, a cocky pilot, a Wookiee and two droids to save the galaxy from the Empire's world-destroying battle station, while also attempting to rescue Princess Leia from the mysterious Darth ...");
+    	Optional<List<MovieDTO>> optionalMovieDTOList = movieService.generateByTitleForMultiplePages("Star", 1L);
+    	
+    	assertThat(optionalMovieDTOList).isPresent();
+    	
+    	List<MovieDTO> movieDTOList = optionalMovieDTOList.get();
+    	
+    	assertThat(movieDTOList).hasSize(1);
+    	
+    	assertThat(movieDTOList.get(0).getPlot()).isEqualTo("Luke Skywalker joins forces with a Jedi Knight, a cocky pilot, a Wookiee and two droids to save the galaxy from the Empire's world-destroying battle station, while also attempting to rescue Princess Leia from the mysterious Darth ...");
     }
 
-    // TODO
-    // rewrite this test, we´re not populating the database anymore, just generating files
+    
 
     /**
     @Test

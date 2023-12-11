@@ -45,12 +45,9 @@ public class MovieService {
 
 
 	private static final Long MAX_RETRIES = 1000L;
-	public void generateCSVByTitle(String title, Long pages, Writer writer){
+	public void generateCSVByTitle(String title, Long pages, StatefulBeanToCsv<MovieDTO> statefulBeanToCsv){
 		generateByTitleForMultiplePages(title, pages)
 				.ifPresent(moviesDTOs -> {
-					StatefulBeanToCsv<MovieDTO> statefulBeanToCsv = new StatefulBeanToCsvBuilder<MovieDTO>(writer)
-							.withSeparator(CSVWriter.DEFAULT_SEPARATOR).build();
-
 					try {
 						statefulBeanToCsv.write(moviesDTOs);
 
