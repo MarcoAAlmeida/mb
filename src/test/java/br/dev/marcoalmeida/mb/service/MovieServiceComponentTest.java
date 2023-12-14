@@ -1,11 +1,25 @@
 package br.dev.marcoalmeida.mb.service;
 
+import br.dev.marcoalmeida.mb.domain.Movie;
 import br.dev.marcoalmeida.mb.repository.MovieRepository;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockserver.client.MockServerClient;
 import org.mockserver.springtest.MockServerTest;
+import org.mockserver.model.MediaType;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.mockserver.model.HttpRequest.request;
+import static org.mockserver.model.HttpResponse.response;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @MockServerTest("omdb.server.url=http://localhost:${mockServerPort}")
@@ -17,12 +31,29 @@ public class MovieServiceComponentTest {
     private MovieService movieService;
 
     private MockServerClient mockServerClient;
+    
 
     @BeforeEach
     public void setup(){
         movieRepository.deleteAll();
     }
     
+    @Test
+    public void WhenTitleAreSupplied_MoviesComeWithPlot() throws IOException {
+    	mockServerClient
+	    .when(request()
+		        .withQueryStringParameter("i", "tt0076759")
+		        .withMethod("GET")
+		    ).respond(response()
+		        .withStatusCode(200)
+		        .withContentType(MediaType.APPLICATION_JSON)
+		        .withBody(Files.readString(Path.of("src/test/resources/omdb/tt0076759.json")))
+		    );
+    	
+    	Optional<Movie> movie = movieRepository.findByTitle("Star Wars: Episode IV - A New Hope");
+    	Movie movieData = movie.get();
+    	assertThat(movieData.getPlot()).isEqualTo("Luke Skywalker joins forces with a Jedi Knight, a cocky pilot, a Wookiee and two droids to save the galaxy from the Empire's world-destroying battle station, while also attempting to rescue Princess Leia from the mysterious Darth ...");
+    }
 
     // TODO
     // rewrite this test, we´re not populating the database anymore, just generating files

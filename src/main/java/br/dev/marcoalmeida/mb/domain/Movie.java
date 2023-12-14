@@ -26,6 +26,8 @@ public class Movie {
     private Long votes;
 
     private Long releaseYear;
+    
+    private String plot;
 
     @Transient
     public Double rank(){
