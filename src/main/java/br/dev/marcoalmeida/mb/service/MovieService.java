@@ -10,9 +10,7 @@ import br.dev.marcoalmeida.mb.exception.MbException;
 import br.dev.marcoalmeida.mb.repository.MovieRepository;
 import br.dev.marcoalmeida.mb.utils.RandomUtils;
 import br.dev.marcoalmeida.mb.utils.ReflexivePair;
-import com.opencsv.CSVWriter;
 import com.opencsv.bean.StatefulBeanToCsv;
-import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import feign.FeignException;
@@ -23,7 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.io.Writer;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -45,12 +42,9 @@ public class MovieService {
 
 
 	private static final Long MAX_RETRIES = 1000L;
-	public void generateCSVByTitle(String title, Long pages, Writer writer){
+	public void generateCSVByTitle(String title, Long pages, StatefulBeanToCsv<MovieDTO> statefulBeanToCsv){
 		generateByTitleForMultiplePages(title, pages)
-				.ifPresent(moviesDTOs -> {
-					StatefulBeanToCsv<MovieDTO> statefulBeanToCsv = new StatefulBeanToCsvBuilder<MovieDTO>(writer)
-							.withSeparator(CSVWriter.DEFAULT_SEPARATOR).build();
-
+				.ifPresent(moviesDTOs -> {	
 					try {
 						statefulBeanToCsv.write(moviesDTOs);
 

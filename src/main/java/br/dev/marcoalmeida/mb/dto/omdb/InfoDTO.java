@@ -2,6 +2,8 @@ package br.dev.marcoalmeida.mb.dto.omdb;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,11 +26,16 @@ public class InfoDTO {
     public InfoDTO(@JsonProperty("Year") String year,
                    @JsonProperty("BoxOffice") String boxOffice,
                    @JsonProperty("imdbRating") String imdbRating,
-                   @JsonProperty("imdbVotes") String imdbVotes) {
+                   @JsonProperty("imdbVotes") String imdbVotes,
+    				@JsonProperty("Plot") String plot){
         this.year = parseReleaseYear(year);
         this.boxOffice = boxOffice;
         this.imdbRating = parseImdbRating(imdbRating);
         this.imdbVotes = parseImdbVotes(imdbVotes);
+        this.plot = plot;
+    }
+    
+    public InfoDTO() {
     }
 
     private static Double parseImdbRating(String imdbRating) {

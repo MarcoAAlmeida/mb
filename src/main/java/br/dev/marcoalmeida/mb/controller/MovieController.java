@@ -1,7 +1,12 @@
 package br.dev.marcoalmeida.mb.controller;
 
+import br.dev.marcoalmeida.mb.dto.csv.MovieDTO;
 import br.dev.marcoalmeida.mb.request.GenerateCSVByTitle;
 import br.dev.marcoalmeida.mb.service.MovieService;
+
+import com.opencsv.CSVWriter;
+import com.opencsv.bean.StatefulBeanToCsv;
+import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,7 +34,10 @@ public class MovieController {
         response.addHeader(HttpHeaders.CONTENT_DISPOSITION,
                 String.format("attachment; filename=\"%s\"", getTimestampedFileName(request.getTitle())));
 
-        movieService.generateCSVByTitle(request.getTitle(), request.getPage(), response.getWriter());
+        StatefulBeanToCsv<MovieDTO> statefulBeanToCsv = new StatefulBeanToCsvBuilder<MovieDTO>(response.getWriter())
+				.withSeparator(CSVWriter.DEFAULT_SEPARATOR).build();
+       
+        movieService.generateCSVByTitle(request.getTitle(), request.getPage(), statefulBeanToCsv);
     }
 
     private String getTimestampedFileName(String title) {
