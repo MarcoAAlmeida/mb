@@ -53,10 +53,13 @@ dependencies {
 	implementation 'org.liquibase:liquibase-core:4.25.0'
 
 	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+
 	implementation 'io.cucumber:cucumber-java:7.14.1'
 	implementation 'io.cucumber:cucumber-spring:7.14.1'
 
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+	testAnnotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+
 	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
 
 	compileOnly 'org.projectlombok:lombok'

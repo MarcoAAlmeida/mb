@@ -65,7 +65,22 @@ public class MovieService {
 				.map(firstPage -> makeAdditionalFetches(title, firstPage, requestedPages.intValue()));
 	}
 
+	public Optional<ReflexivePair<Movie>> findNewPair(Set<ReflexivePair<Movie>> usedPairs) {
+		long retryCount = 0;
 
+		while (retryCount < MAX_RETRIES) {
+			Optional<ReflexivePair<Movie>> candidate = selectRandomReflexivePair();
+
+			if (candidate.stream().anyMatch(pair -> !usedPairs.contains(pair))) {
+				return candidate;
+			}
+
+			retryCount++;
+		}
+
+		return Optional.empty();
+
+	}
 
 	private List<MovieDTO> makeAdditionalFetches(String title, ResultsDTO firstPage, Integer requestedPages) {
 		List<MovieDTO> fromAdditionalCalls = getMaxFetches(firstPage, requestedPages)
@@ -146,22 +161,6 @@ public class MovieService {
 				.build();
 	}
 
-	public Optional<ReflexivePair<Movie>> findNewPair(Set<ReflexivePair<Movie>> usedPairs) {
-		long retryCount = 0;
-
-		while (retryCount < MAX_RETRIES) {
-			Optional<ReflexivePair<Movie>> candidate = selectRandomReflexivePair();
-
-			if (candidate.stream().anyMatch(pair -> !usedPairs.contains(pair))) {
-				return candidate;
-			}
-
-			retryCount++;
-		}
-
-		return Optional.empty();
-
-	}
 
 
 	private Optional<ReflexivePair<Movie>> selectRandomReflexivePair() {
