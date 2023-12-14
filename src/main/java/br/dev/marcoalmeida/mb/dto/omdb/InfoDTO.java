@@ -2,11 +2,17 @@ package br.dev.marcoalmeida.mb.dto.omdb;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Data
 @Slf4j
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class InfoDTO {
     @JsonProperty("Year")
     protected Long year;
