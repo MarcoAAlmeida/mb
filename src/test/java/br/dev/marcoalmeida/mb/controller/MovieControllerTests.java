@@ -27,7 +27,7 @@ public class MovieControllerTests {
     public void WhenLoadByTitleInvoked_LoadedMoviesAreReturned() {
         MockHttpServletResponse mockResponse = new MockHttpServletResponse();
 
-        assertThatCode(()->movieController.generateCSVByTitle(GenerateCSVByTitle.of("Star"), mockResponse))
+        assertThatCode(()->movieController.generateCSVByTitle(GenerateCSVByTitle.of("Star", 1L), mockResponse))
                 .doesNotThrowAnyException();
 
         assertThat(mockResponse.getHeader(HttpHeaders.CONTENT_DISPOSITION)).isNotEmpty();
