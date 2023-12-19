@@ -7,6 +7,7 @@ import br.dev.marcoalmeida.mb.domain.Round;
 import br.dev.marcoalmeida.mb.dto.GameOverDTO;
 import br.dev.marcoalmeida.mb.dto.NewGameDTO;
 import br.dev.marcoalmeida.mb.dto.NextRoundDTO;
+import br.dev.marcoalmeida.mb.dto.UnfinishedGameByPlayerDTO;
 import br.dev.marcoalmeida.mb.mapper.MovieMapper;
 
 import java.time.LocalDateTime;
@@ -31,10 +32,18 @@ public abstract class MbAbstractTest {
     public static final LocalDateTime STARTED_AT = LocalDateTime.of(2023, 11, 28, 0, 0, 0);
     public static final LocalDateTime FINISHED_AT = LocalDateTime.of(2023, 11, 28, 0, 0, 1);
     protected static Integer GAME1_ID = 2;
+    protected static Integer FINISHED_GAME_ID = 3;
     protected static Game GAME1 = Game.builder()
             .id(GAME1_ID)
             .player(PLAYER_1)
             .startedAt(STARTED_AT)
+            .build();
+    
+    protected static Game FINISHED_GAME = Game.builder()
+            .id(FINISHED_GAME_ID)
+            .player(PLAYER_1)
+            .startedAt(STARTED_AT)
+            .finishedAt(FINISHED_AT)
             .build();
 
     protected static Integer ROUND1_ID = 1;
@@ -68,4 +77,9 @@ public abstract class MbAbstractTest {
             .left(MovieMapper.INSTANCE.convert(MOVIE_1))
             .right(MovieMapper.INSTANCE.convert(MOVIE_2))
             .build();
+    
+    protected static UnfinishedGameByPlayerDTO UNFINISHED_GAME_BY_PLAYER_DTO = UnfinishedGameByPlayerDTO.builder()
+    		.gameId(GAME1_ID)
+    		.roundId(ROUND1_ID)
+    		.build();
 }
