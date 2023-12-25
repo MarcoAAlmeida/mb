@@ -1,11 +1,33 @@
+<script setup>
+import { useAuthStore } from '~/store/auth'
+import {storeToRefs} from "pinia";
+
+const authStore = useAuthStore()
+const { logout } = authStore
+const { user } = storeToRefs(authStore)
+
+const props = defineProps({
+  links: {type: Object, required: true}
+})
+
+const isOpen = ref(false)
+
+function leave(){
+  logout()
+  navigateTo('/login')
+
+}
+
+</script>
+
 <template>
   <nav class="bg-white dark:bg-gray-800">
     <div class="container px-6 py-4 mx-auto">
       <div class="lg:flex lg:items-center">
         <div class="flex items-center justify-between">
-          <a class="text-2xl" href="#">
+          <NuxtLink class="text-2xl" to="/">
             movie<span class="text-green-500">battle</span>
-          </a>
+          </NuxtLink>
 
           <!-- Mobile menu button -->
           <div class="flex lg:hidden">
@@ -22,11 +44,15 @@
         </div>
 
         <div v-cloak :class="[isOpen ? 'translate-x-0 opacity-100 ' : 'opacity-0 -translate-x-full']" class="absolute inset-x-0 z-20 flex-1 w-full px-6 py-4 transition-all duration-300 ease-in-out bg-gray-100 dark:bg-gray-800 lg:mt-0 lg:p-0 lg:top-0 lg:relative lg:bg-transparent lg:w-auto lg:opacity-100 lg:translate-x-0 lg:flex lg:items-center lg:justify-between">
-          <div class="flex flex-col text-gray-600 capitalize dark:text-gray-300 lg:flex lg:px-16 lg:-mx-4 lg:flex-row lg:items-center">
+          <div class="flex flex-col text-gray-600 dark:text-gray-300 lg:flex lg:px-16 lg:-mx-4 lg:flex-row lg:items-center">
+          Hello, {{ user.name }} !!!
           </div>
+
+
 
           <div class="flex justify-center mt-6 lg:flex lg:mt-0 lg:-mx-2">
             <UButton v-for="link in links" :key="link.label" class="m-1" :to="link.to">{{ link.label }} </UButton>
+            <UButton key="logout" class="m-1" @click="leave">logout</UButton>
           </div>
         </div>
       </div>
@@ -35,13 +61,4 @@
 
 </template>
 
-<script setup>
-const isOpen = ref(false)
-
-const props = defineProps({
-  links: {type: Object, required: true}
-})
-
-
-</script>
 

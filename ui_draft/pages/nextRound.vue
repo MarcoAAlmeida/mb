@@ -29,7 +29,8 @@
 <script setup>
 
 definePageMeta({
-  layout: 'ongoing'
+  layout: 'ongoing',
+  middleware: 'login-redirect'
 })
 
 

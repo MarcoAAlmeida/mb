@@ -5,4 +5,13 @@ omdb:
 spring:
   liquibase:
     change-log: db/changelog/changelog-test.xml
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+        trace: true
+jwt:
+  private.key: classpath:app.key
+  public.key: classpath:app.pub
 

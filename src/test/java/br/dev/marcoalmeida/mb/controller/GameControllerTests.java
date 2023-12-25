@@ -53,7 +53,15 @@ public class GameControllerTests extends MbAbstractTest {
 
     @Test
     public void WhenGameOverRequested_GameOverDTOReturned() {
-        // TODO
+    	
+    	when(gameService.getGameOver(GAME1_ID)).thenReturn(GAME_OVER_DTO);
+        
+        ResponseEntity<GameOverDTO> responseEntity = gameController.getGameOver(GAME1_ID);
+        
+        assertThat(responseEntity).isNotNull();
+        assertThat(responseEntity.getBody()).isEqualTo(GAME_OVER_DTO);
+        
+        verify(gameService).getGameOver(GAME1_ID);
     }
 
 

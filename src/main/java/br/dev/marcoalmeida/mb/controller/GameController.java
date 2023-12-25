@@ -3,6 +3,7 @@ package br.dev.marcoalmeida.mb.controller;
 import br.dev.marcoalmeida.mb.dto.GameOverDTO;
 import br.dev.marcoalmeida.mb.dto.NewGameDTO;
 import br.dev.marcoalmeida.mb.service.GameService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,7 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("game")
+@RequestMapping("/v1/game")
+@SecurityRequirement(name = "Bearer Authentication")
 @AllArgsConstructor
 public class GameController {
 

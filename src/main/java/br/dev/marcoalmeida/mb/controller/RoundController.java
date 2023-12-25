@@ -4,6 +4,7 @@ import br.dev.marcoalmeida.mb.dto.AnswerDTO;
 import br.dev.marcoalmeida.mb.dto.ChoiceEnum;
 import br.dev.marcoalmeida.mb.dto.NextRoundDTO;
 import br.dev.marcoalmeida.mb.service.RoundService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,7 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("round")
+@RequestMapping("/v1/round")
+@SecurityRequirement(name = "Bearer Authentication")
 @AllArgsConstructor
 public class RoundController {
     private final RoundService roundService;

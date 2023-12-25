@@ -19,7 +19,6 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.spring.CucumberContextConfiguration;
 import io.restassured.RestAssured;
-import io.restassured.authentication.FormAuthConfig;
 import io.restassured.specification.RequestSpecification;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +27,9 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -58,11 +59,14 @@ public class MbStepDefinitions {
 
     private NextRoundDTO nextRoundDTO;
 
+    private Map<String, String> tokensByPlayer;
+
     @Before
     public void setup() {
         RestAssured.baseURI = "http://localhost";
         RestAssured.port = localPort;
         RestAssured.basePath = "/";
+        tokensByPlayer = new HashMap<>();
     }
 
     @Given("the database has default startup data")
@@ -84,7 +88,7 @@ public class MbStepDefinitions {
         getSpecWithAuth(playerId)
                 .pathParam("playerId", playerId).
             when()
-                .get("player/{playerId}/unfinishedGame").
+                .get("v1/player/{playerId}/unfinishedGame").
             then()
                 .statusCode(HttpStatus.UNPROCESSABLE_ENTITY.value())
                 .body("errors", hasItems(errorMessage));
@@ -97,7 +101,7 @@ public class MbStepDefinitions {
         getSpecWithAuth(playerId)
                 .pathParam("playerId", playerId).
             when()
-                .get("player/{playerId}/unfinishedGame").
+                .get("v1/player/{playerId}/unfinishedGame").
             then()
                 .statusCode(HttpStatus.OK.value())
                 .body(equalTo(ObjectMapperUtils.asJson(unfinishedGameByPlayerDTOList)));
@@ -110,7 +114,7 @@ public class MbStepDefinitions {
         getSpecWithAuth(playerId)
                 .pathParam("playerId", playerId).
             when()
-                .post("game/start/{playerId}").
+                .post("v1/game/start/{playerId}").
             then()
                 .statusCode(HttpStatus.CREATED.value())
                 .body(equalTo(ObjectMapperUtils.asJson(newGameDTO)));
@@ -161,7 +165,7 @@ public class MbStepDefinitions {
                 getSpecWithAuth(playerId)
                         .pathParam("playerId", playerId).
                         when()
-                        .put("game/stop/{playerId}").
+                        .put("v1/game/stop/{playerId}").
                         then()
                         .statusCode(HttpStatus.OK.value())
                         .extract()
@@ -201,7 +205,7 @@ public class MbStepDefinitions {
                 .pathParam("roundId", roundId)
                 .pathParam("choice", choice.name()).
             when()
-                .put("round/{roundId}/answer/{choice}").
+                .put("v1/round/{roundId}/answer/{choice}").
             then()
                 .statusCode(HttpStatus.OK.value())
                 .body(equalTo(ObjectMapperUtils.asJson(answerDTO)));
@@ -214,7 +218,7 @@ public class MbStepDefinitions {
                 .pathParam("roundId", roundId)
                 .pathParam("choice", getIncorrect(currentRound.getLeft(), currentRound.getRight())).
             when()
-                .put("round/{roundId}/answer/{choice}").
+                .put("v1/round/{roundId}/answer/{choice}").
             then()
                 .statusCode(HttpStatus.UNPROCESSABLE_ENTITY.value())
                 .body("errors", hasItems(errorMessage));
@@ -232,12 +236,20 @@ public class MbStepDefinitions {
 
     private RequestSpecification getSpecWithAuth(Integer playerId) {
         return playerRepository.findById(playerId)
-                .map(player -> given().auth().form("player1", "player1",
-                        new FormAuthConfig("/login", "username", "password")
-                                .withLoggingEnabled()))
+                .map(this::getSpecWithAuthPlayer)
                 .orElseThrow();
 
 
+    }
+    private RequestSpecification getSpecWithAuthPlayer(Player player) {
+
+        return Optional.ofNullable(tokensByPlayer.get(player.getName()))
+                .map(token -> given().auth().oauth2(token))
+                .orElseGet( () -> {
+                    String newToken = given().auth().preemptive().basic("player1", "player1").post("/v1/token").asString();
+                    tokensByPlayer.put(player.getName(), newToken);
+                    return given().auth().oauth2(newToken);
+                });
     }
     private static NextRoundDTO getNextRoundDTO(String fromServer) {
         return (NextRoundDTO) ObjectMapperUtils.asObject(fromServer, NextRoundDTO.class);
@@ -247,10 +259,15 @@ public class MbStepDefinitions {
         return getSpecWithAuth(playerId)
                 .pathParam("nextRoundId", nextRoundId).
                 when()
-                .get("round/next/{nextRoundId}").
+                .get("v1/round/next/{nextRoundId}").
                 then()
                 .statusCode(HttpStatus.OK.value())
                 .extract()
                 .asString();
+    }
+
+
+    @Then("a file gets generated")
+    public void aFileGetsGenerated() {
     }
 }

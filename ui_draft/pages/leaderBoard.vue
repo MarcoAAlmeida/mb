@@ -5,7 +5,8 @@
 
 <script setup>
 definePageMeta({
-  layout: 'default'
+  layout: 'default',
+  middleware: 'login-redirect'
 })
 
 const people = [{

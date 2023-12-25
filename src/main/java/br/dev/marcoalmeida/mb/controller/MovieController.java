@@ -1,9 +1,15 @@
 package br.dev.marcoalmeida.mb.controller;
 
+import br.dev.marcoalmeida.mb.dto.csv.MovieDTO;
 import br.dev.marcoalmeida.mb.request.GenerateCSVByTitle;
 import br.dev.marcoalmeida.mb.service.MovieService;
+
+import com.opencsv.CSVWriter;
+import com.opencsv.bean.StatefulBeanToCsv;
+import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -18,7 +24,8 @@ import java.time.LocalDateTime;
 import static br.dev.marcoalmeida.mb.utils.FormatterUtils.formatter;
 
 @RestController
-@RequestMapping("movie")
+@RequestMapping("/v1/movie")
+@SecurityRequirement(name = "Bearer Authentication")
 @AllArgsConstructor
 public class MovieController {
     private static final String FILE_MASK = "%s_%s.csv";
@@ -28,8 +35,11 @@ public class MovieController {
             CsvRequiredFieldEmptyException, CsvDataTypeMismatchException {
         response.addHeader(HttpHeaders.CONTENT_DISPOSITION,
                 String.format("attachment; filename=\"%s\"", getTimestampedFileName(request.getTitle())));
-
-        movieService.generateCSVByTitle(request.getTitle(), response.getWriter());
+       
+        StatefulBeanToCsv<MovieDTO> statefulBeanToCsv = new StatefulBeanToCsvBuilder<MovieDTO>(response.getWriter())
+				.withSeparator(CSVWriter.DEFAULT_SEPARATOR).build();
+        
+        movieService.generateCSVByTitle(request.getTitle(), request.getPage(), statefulBeanToCsv);
     }
 
     private String getTimestampedFileName(String title) {

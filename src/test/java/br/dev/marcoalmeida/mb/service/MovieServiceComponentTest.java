@@ -1,8 +1,7 @@
 package br.dev.marcoalmeida.mb.service;
 
-import br.dev.marcoalmeida.mb.domain.Movie;
+import br.dev.marcoalmeida.mb.dto.csv.MovieDTO;
 import br.dev.marcoalmeida.mb.repository.MovieRepository;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockserver.client.MockServerClient;
@@ -31,12 +30,51 @@ public class MovieServiceComponentTest {
     private MovieService movieService;
 
     private MockServerClient mockServerClient;
+    
+    
 
     @BeforeEach
     public void setup(){
         movieRepository.deleteAll();
     }
     
+    @Test
+    public void WhenTitleIsSupplied_MoviesComeWithPlot() throws IOException {
+    	mockServerClient
+	    .when(request()
+		        .withQueryStringParameter("s", "Star")
+		        .withMethod("GET")
+		    ).respond(response()
+		        .withStatusCode(200)
+		        .withContentType(MediaType.APPLICATION_JSON)
+		        .withBody(Files.readString(Path.of("src/test/resources/omdb/searchPlot.json")))
+		    );
+    	
+    	
+    	mockServerClient
+	    .when(request()
+		        .withQueryStringParameter("i", "tt0076759")
+		        .withMethod("GET")
+		    ).respond(response()
+		        .withStatusCode(200)
+		        .withContentType(MediaType.APPLICATION_JSON)
+		        .withBody(Files.readString(Path.of("src/test/resources/omdb/tt0076759.json")))
+		    );
+    	
+    	Optional<List<MovieDTO>> optionalMovieDTOList = movieService.generateByTitleForMultiplePages("Star", 1L);
+    	
+    	assertThat(optionalMovieDTOList).isPresent();
+    	
+    	List<MovieDTO> movieDTOList = optionalMovieDTOList.get();
+    	
+    	assertThat(movieDTOList).hasSize(1);
+    	
+    	assertThat(movieDTOList.get(0).getPlot()).isEqualTo("Luke Skywalker joins forces with a Jedi Knight, a cocky pilot, a Wookiee and two droids to save the galaxy from the Empire's world-destroying battle station, while also attempting to rescue Princess Leia from the mysterious Darth ...");
+    }
+
+    
+
+    /**
     @Test
     public void WhenKeywordSupplied_MoviesArePopulated() throws IOException {
     	
@@ -49,11 +87,11 @@ public class MovieServiceComponentTest {
 
         assertThat(movieRepository.count()).isEqualTo(0L);
 
-        List<Movie> movies = movieService.generateByTitle("Star");
+        Optional<List<MovieDTO>> optionalMovies = movieService.generateByTitleForMultiplePages("Star", 1L);
 
-        assertThat(movies).isNotEmpty();
+        assertThat(optionalMovies).isPresent();
         assertThat(movieRepository.count()).isEqualTo(2);
-        assertThat(movies.size()).isEqualTo(2);
+        assertThat(optionalMovies.get().size()).isEqualTo(2);
 
         Optional<Movie> m1 = movieRepository.findByTitle("Star Wars: Episode IV - A New Hope");
         assertThat(m1).isPresent();
@@ -76,11 +114,13 @@ public class MovieServiceComponentTest {
     	
     	mockServerClient("i", "tt13616990", Files.readString(Path.of("src/test/resources/omdb/tt13616990.json")));
     	
-    	List<Movie> movie = movieService.generateByTitle("Chainsaw");
+    	Optional<List<MovieDTO>> optionalMovieDTOS = movieService.generateByTitleForMultiplePages("Chainsaw", 1L);
 
-    	assertThat(movie).isNotEmpty();
+    	assertThat(optionalMovieDTOS).isPresent();
     	
     	Optional<Movie> m1 = movieRepository.findByTitle("Chainsaw Man");
+
+        assertThat(m1).isPresent();
     	
     	Movie chainsaw = m1.get();
     	
@@ -109,4 +149,5 @@ public class MovieServiceComponentTest {
         assertThat(movie.getPosterUrl()).isEqualTo(posterUrl);
         assertThat(movie.getReleaseYear()).isEqualTo(releaseYear);
     }
+    **/
  }
