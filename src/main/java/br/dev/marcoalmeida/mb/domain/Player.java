@@ -17,6 +17,6 @@ public class Player {
     @EqualsAndHashCode.Include
     private Integer id;
 
-    String name;
+    private String name;
 
 }

@@ -9,6 +9,6 @@ import org.mapstruct.factory.Mappers;
 @Mapper(unmappedTargetPolicy = ReportingPolicy.WARN, componentModel = "spring")
 public interface MovieMapper {
     MovieMapper INSTANCE = Mappers.getMapper(MovieMapper.class);
-    MovieDTO convert(Movie car);
+    MovieDTO convert(Movie movie);
     Movie convert(MovieDTO movieDTO);
 }

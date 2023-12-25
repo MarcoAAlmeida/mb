@@ -1,33 +1,31 @@
 <script setup>
 
 import { useAuthStore } from '~/store/auth'
-import { useHelloStore } from '~/store/hello'
+import { usePlayerStore } from '~/store/player'
 import {storeToRefs} from "pinia";
 
 const authStore = useAuthStore()
 const { user } = storeToRefs(authStore)
 
-const helloStore = useHelloStore()
-const { getMessage } = helloStore
+const playerStore = usePlayerStore()
+const { getPlayerDetails, getUnfinishedGame } = playerStore
 
-const { message, hasMessage, hasError } = storeToRefs(helloStore)
+const { player, unfinishedGame, hasPlayer, hasUnfinishedGame } = storeToRefs(playerStore)
 
 definePageMeta({
   middleware: 'login-redirect'
 })
 
 await onMounted(() => {
-  getMessage()
+  getPlayerDetails(user.value.name)
 })
 
 </script>
 <template>
    Hello {{ user }} from frontend
-
-  <div v-show="hasError" class="text-red-400">token error</div>
-  <div v-show="hasMessage" class="text-green-400">{{ message }} from server</div>
+  <div v-show="hasPlayer" class="text-red-400">{{ player }}</div>
+  <div v-show="hasUnfinishedGame" class="text-red-400">{{ unfinishedGame }}</div>
 </template>
-
 
 <style>
 </style>

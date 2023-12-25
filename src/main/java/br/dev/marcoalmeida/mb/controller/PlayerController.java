@@ -1,5 +1,6 @@
 package br.dev.marcoalmeida.mb.controller;
 
+import br.dev.marcoalmeida.mb.dto.PlayerDTO;
 import br.dev.marcoalmeida.mb.dto.UnfinishedGameByPlayerDTO;
 import br.dev.marcoalmeida.mb.service.PlayerService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -22,6 +23,12 @@ public class PlayerController {
     @GetMapping(value = "/{playerId}/unfinishedGame", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UnfinishedGameByPlayerDTO> getUnfinishedGameByPlayer(@PathVariable(required = true) Integer playerId) {
         return new ResponseEntity<>(playerService.getUnfinishedGameByPlayer(playerId), HttpStatus.OK);
+
+    }
+
+    @GetMapping(value = "/byUsername/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PlayerDTO> getPlayerDetails(@PathVariable(required = true) String username) {
+        return new ResponseEntity<>(playerService.getByUsername(username), HttpStatus.OK);
 
     }
 

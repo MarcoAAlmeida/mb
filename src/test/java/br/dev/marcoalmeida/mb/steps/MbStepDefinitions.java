@@ -246,7 +246,7 @@ public class MbStepDefinitions {
         return Optional.ofNullable(tokensByPlayer.get(player.getName()))
                 .map(token -> given().auth().oauth2(token))
                 .orElseGet( () -> {
-                    String newToken = given().auth().preemptive().basic("player1", "player1").post("/v1/token").asString();
+                    String newToken = given().auth().preemptive().basic(player.getName(), player.getName()).post("/v1/token").asString();
                     tokensByPlayer.put(player.getName(), newToken);
                     return given().auth().oauth2(newToken);
                 });

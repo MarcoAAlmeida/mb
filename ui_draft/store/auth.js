@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { useFetch } from "nuxt/app"
+import {useFetch, useRuntimeConfig} from "nuxt/app"
 
 export const useAuthStore = defineStore({
     id: 'auth',
@@ -22,12 +22,11 @@ export const useAuthStore = defineStore({
             this.token = null
             this.error = null
 
-            const { data, status } = await useFetch('/token',{
+            const { data, status } = await useFetch('v1/token',{
                 method: 'POST',
-                baseURL: 'http://localhost:8080',
+                baseURL: useRuntimeConfig().public.apiBase,
                 headers: {
                     Authorization : 'Basic ' + btoa(username + ":" + password)
-
                 },
                 body: {
                     username: username,

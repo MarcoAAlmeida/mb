@@ -7,6 +7,7 @@ import br.dev.marcoalmeida.mb.domain.Round;
 import br.dev.marcoalmeida.mb.dto.GameOverDTO;
 import br.dev.marcoalmeida.mb.dto.NewGameDTO;
 import br.dev.marcoalmeida.mb.dto.NextRoundDTO;
+import br.dev.marcoalmeida.mb.dto.PlayerDTO;
 import br.dev.marcoalmeida.mb.dto.UnfinishedGameByPlayerDTO;
 import br.dev.marcoalmeida.mb.mapper.MovieMapper;
 
@@ -24,10 +25,11 @@ public abstract class MbAbstractTest {
     protected static Movie MOVIE_3 = Movie.builder().id("id_3").build();
 
     protected static Integer PLAYER1_ID = 1;
+    protected static String PLAYER1_NAME = "p1";
 
     protected static Player PLAYER_1 = Player.builder()
             .id(PLAYER1_ID)
-            .name("p1")
+            .name(PLAYER1_NAME)
             .build();
     public static final LocalDateTime STARTED_AT = LocalDateTime.of(2023, 11, 28, 0, 0, 0);
     public static final LocalDateTime FINISHED_AT = LocalDateTime.of(2023, 11, 28, 0, 0, 1);
@@ -83,4 +85,9 @@ public abstract class MbAbstractTest {
     		.gameId(UNFINISHED_GAME_ID)
     		.roundId(ROUND1_ID)
     		.build();
+
+    protected static PlayerDTO PLAYER_DTO = PlayerDTO.builder()
+            .id(PLAYER1_ID)
+            .name(PLAYER1_NAME)
+            .build();
 }

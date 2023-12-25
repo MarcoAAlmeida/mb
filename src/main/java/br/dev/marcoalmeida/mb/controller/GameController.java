@@ -41,22 +41,4 @@ public class GameController {
 
     }
 
-
-
-
-    /**
-     *  purpose: returns info about a finished Game
-     *
-     *  verb REST : GET
-     *
-     *  route : game/over/{gameId}
-     *
-     *  method : getFinishedGame(Integer gameId)
-     *
-     *  params : Integer gameId (path)
-     *
-     *  returns: 200 and GameOverDTO
-     *
-     */
-
 }
